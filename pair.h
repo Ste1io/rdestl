@@ -1,9 +1,11 @@
 #ifndef RDESTL_PAIR_H
 #define RDESTL_PAIR_H
 
+#ifndef RDE_COMPILER_MSVC_2010
 // Use std::pair (it's bigger, but the actual code is 'good enough'
 // and it comes with more 'modern C++' bells and whistles (most notably, piecewise construct)
 //#define RDESTL_USE_STD_PAIR 1
+#endif
 
 #include "type_traits.h"
 
@@ -33,10 +35,19 @@ struct pair
 	pair(const pair<T1, T2>& rhs): first(rhs.first), second(rhs.second) { /**/ }
 	pair(pair<T1, T2>&& rhs): first(std::move(rhs.first)), second(std::move(rhs.second)) { /**/ }
 
+#ifndef RDE_COMPILER_MSVC_2010
 	template<class... Args2>
 	pair(T1&& first_args, Args2&&... second_args)
 		: first(std::forward<T1>(first_args))
 		, second(std::forward<Args2>(second_args)...) { /**/ }
+#else
+	// TODO Regression tests for VS2010
+	template<class T1, class T2>
+	pair(T1&& arg1, T2&& arg2)
+		: first(std::forward<T1>(arg1))
+		, second(std::forward<T2>(arg2)) { /**/ }
+#endif
+
 	pair& operator=(const pair<T1, T2>& rhs)
 	{
 		first = rhs.first;
@@ -63,7 +74,7 @@ struct is_pod<pair<T1, T2>>
 {
 	enum {
 		value = (is_pod<T1>::value || is_fundamental<T1>::value) &&
-		(is_pod<T2>::value || is_fundamental<T2>::value)
+				(is_pod<T2>::value || is_fundamental<T2>::value)
 	};
 };
 
