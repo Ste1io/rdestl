@@ -289,6 +289,7 @@ public:
 		rde::destruct(m_end);
 	}
 
+	#ifndef RDE_COMPILER_MSVC_2010
 	template<class... Args>
 	void emplace_back(Args&&... args)
 	{
@@ -298,6 +299,236 @@ public:
 		++m_end;
 		TStorage::record_high_watermark();
 	}
+	#else
+	// TODO Regression tests for VS2010
+	#pragma region VS2010_COMPATABILITY_TEMPLATES
+
+	template<class Arg1>
+	void emplace_back(Arg1&& arg1) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20), std::forward<Arg21>(arg21));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20), std::forward<Arg21>(arg21), std::forward<Arg22>(arg22));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20), std::forward<Arg21>(arg21), std::forward<Arg22>(arg22), std::forward<Arg23>(arg23));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23, class Arg24>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20), std::forward<Arg21>(arg21), std::forward<Arg22>(arg22), std::forward<Arg23>(arg23), std::forward<Arg24>(arg24));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23, class Arg24, class Arg25>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24, Arg25&& arg25) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20), std::forward<Arg21>(arg21), std::forward<Arg22>(arg22), std::forward<Arg23>(arg23), std::forward<Arg24>(arg24), std::forward<Arg25>(arg25));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23, class Arg24, class Arg25, class Arg26>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24, Arg25&& arg25, Arg26&& arg26) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20), std::forward<Arg21>(arg21), std::forward<Arg22>(arg22), std::forward<Arg23>(arg23), std::forward<Arg24>(arg24), std::forward<Arg25>(arg25), std::forward<Arg26>(arg26));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23, class Arg24, class Arg25, class Arg26, class Arg27>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24, Arg25&& arg25, Arg26&& arg26, Arg27&& arg27) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20), std::forward<Arg21>(arg21), std::forward<Arg22>(arg22), std::forward<Arg23>(arg23), std::forward<Arg24>(arg24), std::forward<Arg25>(arg25), std::forward<Arg26>(arg26), std::forward<Arg27>(arg27));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23, class Arg24, class Arg25, class Arg26, class Arg27, class Arg28>
+	void emplace_back(Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24, Arg25&& arg25, Arg26&& arg26, Arg27&& arg27, Arg28&& arg28) {
+		if (m_end == m_capacityEnd) grow();
+		rde::construct_args(m_end, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20), std::forward<Arg21>(arg21), std::forward<Arg22>(arg22), std::forward<Arg23>(arg23), std::forward<Arg24>(arg24), std::forward<Arg25>(arg25), std::forward<Arg26>(arg26), std::forward<Arg27>(arg27), std::forward<Arg28>(arg28));
+		++m_end;
+		TStorage::record_high_watermark();
+	}
+
+	#pragma endregion
+	#endif
 
 	void assign(const T* first, const T* last)
 	{
