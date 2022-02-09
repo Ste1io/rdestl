@@ -256,7 +256,7 @@ public:
 		return emplace(v.first, v.second);
 	}
 
-	#ifndef RDE_COMPILER_MSVC_2010
+	#if RDE_HAS_CPP11
 	template<class K = key_type, class... Args>
 	rde::pair<iterator, bool> emplace(K&& key, Args&&... args)
 	{
@@ -526,7 +526,7 @@ public:
 	}
 
 	#pragma endregion
-	#endif
+	#endif // #if RDE_HAS_CPP11
 
 	size_type erase(const key_type& key)
 	{
@@ -629,7 +629,7 @@ private:
 		RDE_ASSERT(m_numUsed < m_capacity);
 	}
 
-	#ifndef RDE_COMPILER_MSVC_2010
+	#if RDE_HAS_CPP11
 	template<class K = key_type, class... Args> RDE_FORCEINLINE
 	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, K&& key, Args&&... args)
 	{
@@ -1076,7 +1076,7 @@ private:
 	}
 
 	#pragma endregion
-	#endif
+	#endif // #if RDE_HAS_CPP11
 
 	rde::pair<iterator, bool> insert_at(const value_type& v, node* n, hash_value_t hash)
 	{

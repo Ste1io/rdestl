@@ -289,7 +289,7 @@ public:
 		rde::destruct(m_end);
 	}
 
-	#ifndef RDE_COMPILER_MSVC_2010
+	#if RDE_HAS_CPP11
 	template<class... Args>
 	void emplace_back(Args&&... args)
 	{
@@ -528,7 +528,7 @@ public:
 	}
 
 	#pragma endregion
-	#endif
+	#endif // #if RDE_HAS_CPP11
 
 	void assign(const T* first, const T* last)
 	{

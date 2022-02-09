@@ -1,7 +1,7 @@
 #ifndef RDESTL_PAIR_H
 #define RDESTL_PAIR_H
 
-#ifndef RDE_COMPILER_MSVC_2010
+#if RDE_HAS_CPP11
 // Use std::pair (it's bigger, but the actual code is 'good enough'
 // and it comes with more 'modern C++' bells and whistles (most notably, piecewise construct)
 //#define RDESTL_USE_STD_PAIR 1
@@ -35,7 +35,7 @@ struct pair
 	pair(const pair<T1, T2>& rhs): first(rhs.first), second(rhs.second) { /**/ }
 	pair(pair<T1, T2>&& rhs): first(std::move(rhs.first)), second(std::move(rhs.second)) { /**/ }
 
-#ifndef RDE_COMPILER_MSVC_2010
+#if RDE_HAS_CPP11
 	template<class... Args2>
 	pair(T1&& first_args, Args2&&... second_args)
 		: first(std::forward<T1>(first_args))
@@ -46,7 +46,7 @@ struct pair
 	pair(T1&& arg1, T2&& arg2)
 		: first(std::forward<T1>(arg1))
 		, second(std::forward<T2>(arg2)) { /**/ }
-#endif
+#endif // #if RDE_HAS_CPP11
 
 	pair& operator=(const pair<T1, T2>& rhs)
 	{

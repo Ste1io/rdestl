@@ -9,7 +9,7 @@
 namespace rde
 {
 
-#ifndef RDE_COMPILER_MSVC_2010
+#if RDE_HAS_CPP11
 //-----------------------------------------------------------------------------
 // Modern C++ version that does constructor/copy constructor/move constructor in 1
 template<typename T, typename... Args> RDE_FORCEINLINE
@@ -162,7 +162,8 @@ void construct_args(T* p, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Ar
 }
 
 #pragma endregion
-#endif
+#endif // #if RDE_HAS_CPP11
+
 //-----------------------------------------------------------------------------
 template<typename T> RDE_FORCEINLINE
 void copy_construct(T* mem, const T& orig)
