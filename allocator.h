@@ -3,16 +3,28 @@
 
 namespace rde
 {
+
 // CONCEPT!
 class allocator
 {
 public:
-	explicit allocator(const char* name = "DEFAULT"): m_name(name) {}
+	explicit allocator(const char* name = "DEFAULT"): m_name(name) { }
+
+#if RDE_HAS_CPP11
 	allocator(const allocator&) = default;
 	allocator(allocator&&) = default;
+#else
+	//allocator(const allocator&);
+	//allocator(allocator&&);
+#endif
+
 	~allocator() {}
 
+#if RDE_HAS_CPP11
 	allocator& operator=(const allocator&) = default;
+#else
+	//allocator& operator=(const allocator&);
+#endif
 
 	void* allocate(unsigned int bytes, int flags = 0);
 	// Not supported for standard allocator for the time being.
@@ -30,6 +42,7 @@ inline bool operator==(const allocator& /*lhs*/, const allocator& /*rhs*/)
 {
 	return true;
 }
+
 inline bool operator!=(const allocator& lhs, const allocator& rhs)
 {
 	return !(lhs == rhs);
