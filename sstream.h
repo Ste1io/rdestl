@@ -36,7 +36,8 @@ struct basic_stringstream
 
 	bool good() const 				{ return buffer.size() ? cursor != buffer.end() : false; }
 	bool eof() const 				{ return !good(); }
-	explicit operator bool() const 	{ return good(); }
+	// TODO implement safe bool idiom
+	operator bool() const 			{ return good(); }
 
 	void reset(const value_type* inp) {
 		init(inp);
