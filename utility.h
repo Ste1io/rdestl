@@ -77,7 +77,6 @@ namespace internal
 		Sys::MemMove(result, first, n);
 	}
 
-
 	template<typename T>
 	void copy_construct_n(const T* first, size_t n, T* result, int_to_type<false>)
 	{
@@ -205,6 +204,31 @@ namespace internal
 
 } // namespace internal
 } // namespace rde
+
+
+namespace std {
+
+#if !(RDE_HAS_CPP11)
+
+template<class T, class U>
+T exchange(T& obj, U&& new_value)
+{
+	T old_value = std::move(obj);
+	obj = std::forward<U>(new_value);
+	return old_value;
+}
+
+template<class T>
+T exchange(T& obj, T&& new_value)
+{
+	T old_value = std::move(obj);
+	obj = std::forward<T>(new_value);
+	return old_value;
+}
+
+#endif // #if !RDE_HAS_CPP11
+
+} //namespace std
 
 //-----------------------------------------------------------------------------
 #endif // #ifndef RDESTL_UTILITY_H
