@@ -27,7 +27,6 @@ struct standard_vector_storage
 		m_capacityEnd(0),
 		m_allocator(allocator)
 	{
-		/**/
 	}
 	standard_vector_storage(standard_vector_storage&& rhs)
 		: m_begin(std::exchange(rhs.m_begin, nullptr)),
