@@ -25,19 +25,31 @@ namespace rde
 template<typename E, typename TAlloc = rde::allocator>
 struct basic_stringstream
 {
+	typedef basic_stringstream<E, TAlloc>       this_type;
 	typedef E									value_type;
 	typedef rde::vector<value_type, TAlloc>		buffer_type;
 	typedef typename buffer_type::size_type		size_type;
 	typedef basic_string<value_type, TAlloc>	string_type;
 
+#if !(RDE_HAS_CPP11)
+private:
+	typedef void (this_type::*bool_type)() const;
+	void comparisons_not_supported() const { }
+public:
+#endif // #if !RDE_HAS_CPP11
+
 	explicit basic_stringstream(const value_type* inp) { init(inp); }
 	explicit basic_stringstream(const string_type& inp) { init(inp.c_str()); }
-	basic_stringstream() {}
+	basic_stringstream() { }
 
-	bool good() const 				{ return buffer.size() ? cursor != buffer.end() : false; }
-	bool eof() const 				{ return !good(); }
-	// TODO implement safe bool idiom
-	operator bool() const 			{ return good(); }
+	bool good() const               { return buffer.size() ? cursor != buffer.end() : false; }
+	bool eof() const                { return !good(); }
+
+#if RDE_HAS_CPP11
+	explicit operator bool() const  { return good(); }
+#else
+	operator bool_type() const      { return good() ? &this_type::comparisons_not_supported : 0; }
+#endif // #if RDE_HAS_CPP11
 
 	void reset(const value_type* inp) {
 		init(inp);
@@ -116,6 +128,13 @@ private:
 	buffer_type buffer;
 	typename buffer_type::const_iterator cursor;
 };
+
+#if !(RDE_HAS_CPP11)
+template<typename E, typename TAlloc, class U> bool operator==(const basic_stringstream<E, TAlloc>& lhs, const U&) { lhs.comparisons_not_supported(); return false; }
+template<typename E, typename TAlloc, class U> bool operator!=(const basic_stringstream<E, TAlloc>& lhs, const U&) { lhs.comparisons_not_supported(); return false; }
+template<class U, typename E, typename TAlloc> bool operator==(const U&, const basic_stringstream<E, TAlloc>& rhs) { rhs.comparisons_not_supported(); return false; }
+template<class U, typename E, typename TAlloc> bool operator!=(const U&, const basic_stringstream<E, TAlloc>& rhs) { rhs.comparisons_not_supported(); return false; }
+#endif // #if !RDE_HAS_CPP11
 
 typedef basic_stringstream<char>	stringstream;
 
