@@ -2,6 +2,7 @@
 #define RDESTL_UTILITY_H
 
 #include "rdestl_common.h"
+#include "int_to_type.h"
 #include <new>
 
 namespace rde
@@ -108,7 +109,7 @@ namespace internal
 	void destruct_n(T* first, size_t n, int_to_type<false>)
 	{
 		// For unknown reason MSVC cant see reference to first here...
-		sizeof(first);
+		(void)first;
 		for (size_t i = 0; i < n; ++i)
 			(first + i)->~T();
 	}
@@ -210,21 +211,27 @@ namespace std {
 
 #if !(RDE_HAS_CPP11)
 
-template<class T, class U>
+#include <type_traits>
+#include <utility>
+
+//template <typename T, typename U>
+//typename std::enable_if<
+//	std::is_same<U, ::std::nullptr_t>::value, ::std::nullptr_t
+//>::type
+//exchange(T& obj, U&& new_value)
+//{
+//	T old_value = std::move(obj);
+//	obj = new_value;
+//	return old_value;
+//}
+
+template<typename T, typename U>
 T exchange(T& obj, U&& new_value)
 {
 	T old_value = std::move(obj);
 	obj = std::forward<U>(new_value);
 	return old_value;
 }
-
-// template<class T>
-// T exchange(T& obj, T&& new_value)
-// {
-// 	T old_value = std::move(obj);
-// 	obj = std::forward<T>(new_value);
-// 	return old_value;
-// }
 
 #endif // #if !RDE_HAS_CPP11
 

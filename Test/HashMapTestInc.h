@@ -190,7 +190,6 @@
 		tMap::iterator it = a.find("hello");
 		CHECK(it != a.end());
 		CHECK(25 == it->second);
-
 	}
 	SECTION("SwapEmpty")
 	{

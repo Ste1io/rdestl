@@ -18,7 +18,6 @@ void construct_args(T* p, Args&&... args)
 	::new (static_cast<void*>(p)) T(std::forward<Args>(args)...);
 }
 #else
-// TODO Regression tests for VS2010
 #pragma region VS2010_COMPATABILITY_TEMPLATES
 
 template<typename T, class Arg1> RDE_FORCEINLINE

@@ -299,7 +299,6 @@ public:
 		TStorage::record_high_watermark();
 	}
 	#else
-	// TODO Regression tests for VS2010
 	#pragma region VS2010_COMPATABILITY_TEMPLATES
 
 	template<class Arg1>
@@ -547,7 +546,7 @@ public:
 		RDE_ASSERT(invariant());
 	}
 
-	void insert(size_type index, size_type n, const T& val)
+	void insert(int index, size_type n, const T& val)
 	{
 		RDE_ASSERT(invariant());
 		const size_type indexEnd = index + n;

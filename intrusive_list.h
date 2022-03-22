@@ -137,6 +137,7 @@ public:
 		// Compile error if T not derived from intrusive_list_node
 		intrusive_list_node* testNode((T*)0);
 		static_cast<void>(sizeof(testNode));
+		(void)testNode;
 	}
 
 	void push_back(value_type* v)

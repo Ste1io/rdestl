@@ -5,12 +5,14 @@
 #include "allocator.h"
 #include "functional.h"
 #include "rhash.h"
+#include "iterator.h"
 #include "pair.h"
 
 #include <tuple> // TODO use own tuple?
 
 namespace rde
 {
+
 // Load factor is 7/8th.
 template<typename TKey, typename TValue,
 	class THashFunc = rde::hash<TKey>,
@@ -654,7 +656,6 @@ private:
 		return ret_type_t(iterator(n, this), true);
 	}
 	#else
-	// TODO Regression tests for VS2010
 	#pragma region VS2010_COMPATABILITY_TEMPLATES
 
 	template<class Arg1> RDE_FORCEINLINE

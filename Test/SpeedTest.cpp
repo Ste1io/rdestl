@@ -1,10 +1,8 @@
-#include "rdestl/vector.h"
-#include <cstdio>
 #include <numeric> 
 #include <vector>
 #include <windows.h>
 #include <string>
-
+#include "vector.h"
 
 namespace
 {

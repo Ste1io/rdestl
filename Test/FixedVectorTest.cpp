@@ -1,6 +1,6 @@
 #include "vendor/Catch/catch.hpp"
-#include "rdestl/fixed_vector.h"
-#include "rdestl/pair.h"
+#include "fixed_vector.h"
+#include "pair.h"
 #include <xmmintrin.h>
 
 
@@ -24,6 +24,7 @@ TEST_CASE("fixed_vector", "[vector]")
 	{
 		rde::fixed_vector<__m128, 1, false> v;
 		rde::aligned_as<__m128>::res r;
+		(void)r;
 		CHECK(16ul == sizeof(r));
 		CHECK(16ul == sizeof(__m128));
 		CHECK(16 == rde::rde_alignof<__m128>::res);
