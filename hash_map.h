@@ -177,7 +177,6 @@ public:
 	}
 	explicit hash_map(e_noinitialize)
 	{
-		/**/
 	}
 	~hash_map()
 	{
@@ -252,7 +251,15 @@ public:
 
 	rde::pair<iterator, bool> insert(const value_type& v)
 	{
-		return emplace(v.first, v.second);
+		RDE_ASSERT(invariant());
+		if (m_numUsed * 8 >= m_capacity * 7)
+			grow();
+
+		hash_value_t hash;
+		node* n = find_for_insert(v.first, &hash);
+
+		//return emplace_at(n, hash, v.first, v.second);
+		return insert_at(v, n, hash);
 	}
 
 	#if RDE_HAS_CPP11
@@ -271,6 +278,22 @@ public:
 	}
 
 	#else
+
+	#if !USE_CPP0X_COMPATABILITY_TEMPLATES
+
+	rde::pair<iterator, bool> emplace(TKey&& key, TValue&& value) {
+		RDE_ASSERT(invariant());
+		if (m_numUsed * 8 >= m_capacity * 7)
+			grow();
+
+		hash_value_t hash;
+		node* n = find_for_insert(key, &hash);
+
+		return emplace_at(n, hash, std::forward<TKey>(key), std::forward<TValue>(value));
+	}
+
+	#else
+
 	// NOTE VC100 won't compile default template arguments for methods (error C4519). I've removed the key_type template argument
 	// used in `emplace` and `emplace_at`; afaik it shouldn't be necessary when not parameter packing anyways...
 
@@ -653,6 +676,30 @@ private:
 		RDE_ASSERT(invariant());
 		return ret_type_t(iterator(n, this), true);
 	}
+
+	#else
+
+	#if !USE_CPP0X_COMPATABILITY_TEMPLATES
+		
+	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, TKey&& key, TValue&& value) {
+		typedef rde::pair<iterator, bool> ret_type_t;
+
+		if (n->is_occupied()) {
+			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
+			return ret_type_t(iterator(n, this), false);
+		}
+
+		if (n->is_unused())
+			++m_numUsed;
+
+		rde::construct_args(&n->data, std::forward<key_type>(key), std::forward<TValue>(value));
+		n->hash = hash;
+		++m_size;
+
+		RDE_ASSERT(invariant());
+		return ret_type_t(iterator(n, this), true);
+	}
+
 	#else
 
 	template<class Arg1> RDE_FORCEINLINE
@@ -1085,7 +1132,24 @@ private:
 			return insert(v);
 
 		RDE_ASSERT(!n->is_occupied());
-		return emplace_at(n, hash, v.first, v.second);
+		//return emplace_at(n, hash, v.first, v.second);
+		typedef rde::pair<iterator, bool> ret_type_t;
+
+		if (n->is_occupied()) {
+			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(v.first, n->data.first));
+			return ret_type_t(iterator(n, this), false);
+		}
+
+		if (n->is_unused())
+			++m_numUsed;
+
+		rde::construct_args(&n->data, v.first, v.second);
+		n->hash = hash;
+		++m_size;
+
+		RDE_ASSERT(invariant());
+		return ret_type_t(iterator(n, this), true);
+
 	}
 	node* find_for_insert(const key_type& key, hash_value_t* out_hash)
 	{
