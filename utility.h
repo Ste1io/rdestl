@@ -109,6 +109,7 @@ namespace internal
 	void destruct_n(T* first, size_t n, int_to_type<false>)
 	{
 		// For unknown reason MSVC cant see reference to first here...
+		(void)sizeof(first);
 		(void)first;
 		for (size_t i = 0; i < n; ++i)
 			(first + i)->~T();
