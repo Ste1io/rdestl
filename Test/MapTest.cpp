@@ -1,6 +1,6 @@
-#include "vendor/Catch/catch.hpp"
 #include "map.h"
 #include "rde_string.h"
+#include "vendor/Catch/catch.hpp"
 
 namespace
 {

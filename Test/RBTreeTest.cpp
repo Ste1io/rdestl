@@ -1,6 +1,6 @@
-#include "vendor/Catch/catch.hpp"
-#include "rb_tree.h"
 #include <map>
+#include "rb_tree.h"
+#include "vendor/Catch/catch.hpp"
 
 namespace
 {

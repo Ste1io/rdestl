@@ -1,7 +1,7 @@
-#include "vendor/Catch/catch.hpp"
+#include <cstdio>
 #include "vector.h"
 #include "pair.h"
-#include <cstdio>
+#include "vendor/Catch/catch.hpp"
 
 struct MyStruct
 {

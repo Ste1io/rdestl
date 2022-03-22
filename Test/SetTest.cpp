@@ -1,5 +1,5 @@
-#include "vendor/Catch/catch.hpp"
 #include "set.h"
+#include "vendor/Catch/catch.hpp"
 
 namespace
 {
@@ -15,7 +15,7 @@ TEST_CASE("set", "[set]")
 	{
 		rde::set<int> t;
 		t.insert(5);
-		rde::set<int>::iterator it = t.begin();
+		rde::set<int>::iterator it = t.begin();             
 		CHECK(it != t.end());
 		CHECK(5 == *it);
 	}

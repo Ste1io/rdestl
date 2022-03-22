@@ -1,6 +1,6 @@
+#include <windows.h>
 #include <numeric> 
 #include <vector>
-#include <windows.h>
 #include <string>
 #include "vector.h"
 

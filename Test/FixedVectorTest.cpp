@@ -1,7 +1,7 @@
-#include "vendor/Catch/catch.hpp"
-#include "fixed_vector.h"
-#include "pair.h"
 #include <xmmintrin.h>
+#include "pair.h"
+#include "fixed_vector.h"
+#include "vendor/Catch/catch.hpp"
 
 
 namespace
