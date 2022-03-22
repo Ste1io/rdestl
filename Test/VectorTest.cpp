@@ -412,14 +412,15 @@ TEST_CASE("vector", "[vector]")
         CHECK(1 == v2[0]);
         CHECK(2 == v2[1]);
     }
+
     SECTION("EmplaceBack")
     {
         rde::vector<rde::pair<int, int> > v;
-
+	
         v.emplace_back(1, 2);
         v.emplace_back(3, 4);
         v.emplace_back(5, 6);
-
+	
         CHECK(3 == v.size());
         CHECK(v[0].first == 1); CHECK(v[0].second == 2);
         CHECK(v[1].first == 3); CHECK(v[1].second == 4);

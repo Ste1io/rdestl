@@ -208,14 +208,14 @@ namespace internal
 } // namespace rde
 
 
-namespace std {
-
-#if !(RDE_HAS_CPP11)
+#if !RDE_HAS_CPP11
 
 #include <type_traits>
 #include <utility>
 
-//template <typename T, typename U>
+namespace std {
+
+//template<typename T, typename U>
 //typename std::enable_if<
 //	std::is_same<U, ::std::nullptr_t>::value, ::std::nullptr_t
 //>::type
@@ -234,9 +234,9 @@ T exchange(T& obj, U&& new_value)
 	return old_value;
 }
 
-#endif // #if !RDE_HAS_CPP11
-
 } //namespace std
+
+#endif // #if !RDE_HAS_CPP11
 
 //-----------------------------------------------------------------------------
 #endif // #ifndef RDESTL_UTILITY_H

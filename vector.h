@@ -289,6 +289,7 @@ public:
 	}
 
 	#if RDE_HAS_CPP11
+
 	template<class... Args>
 	void emplace_back(Args&&... args)
 	{
@@ -298,8 +299,10 @@ public:
 		++m_end;
 		TStorage::record_high_watermark();
 	}
+
 	#else
-	#pragma region VS2010_COMPATABILITY_TEMPLATES
+	
+	#if !USE_CPP0X_COMPATABILITY_TEMPLATES
 
 	template<class Arg1>
 	void emplace_back(Arg1&& arg1) {
@@ -525,7 +528,7 @@ public:
 		TStorage::record_high_watermark();
 	}
 
-	#pragma endregion
+	#endif // #if USE_CPP0X_COMPATABILITY_TEMPLATES
 	#endif // #if RDE_HAS_CPP11
 
 	void assign(const T* first, const T* last)

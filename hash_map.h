@@ -143,10 +143,8 @@ public:
 		m_numUsed(0),
 		m_allocator(allocator)
 	{
-		/**/
 	}
-	explicit hash_map(size_type initial_bucket_count,
-			const allocator_type& allocator = allocator_type())
+	explicit hash_map(size_type initial_bucket_count, const allocator_type& allocator = allocator_type())
 		: m_nodes(&ms_emptyNode),
 		m_size(0),
 		m_capacity(0),
@@ -156,9 +154,7 @@ public:
 	{
 		reserve(initial_bucket_count);
 	}
-	hash_map(size_type initial_bucket_count,
-			const THashFunc& hashFunc,
-			const allocator_type& allocator = allocator_type())
+	hash_map(size_type initial_bucket_count, const THashFunc& hashFunc, const allocator_type& allocator = allocator_type())
 		: m_nodes(&ms_emptyNode),
 		m_size(0),
 		m_capacity(0),
@@ -260,6 +256,7 @@ public:
 	}
 
 	#if RDE_HAS_CPP11
+
 	template<class K = key_type, class... Args>
 	rde::pair<iterator, bool> emplace(K&& key, Args&&... args)
 	{
@@ -272,11 +269,10 @@ public:
 
 		return emplace_at(n, hash, std::forward<K>(key), std::forward<Args>(args)...);
 	}
+
 	#else
-	// TODO Regression tests for VS2010
 	// NOTE VC100 won't compile default template arguments for methods (error C4519). I've removed the key_type template argument
 	// used in `emplace` and `emplace_at`; afaik it shouldn't be necessary when not parameter packing anyways...
-	#pragma region VS2010_COMPATABILITY_TEMPLATES
 
 	template<class Arg1>
 	rde::pair<iterator, bool> emplace(key_type&& key, Arg1&& arg1) {
@@ -530,7 +526,7 @@ public:
 		return emplace_at(n, hash, std::forward<key_type>(key), std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20), std::forward<Arg21>(arg21), std::forward<Arg22>(arg22), std::forward<Arg23>(arg23), std::forward<Arg24>(arg24), std::forward<Arg25>(arg25), std::forward<Arg26>(arg26), std::forward<Arg27>(arg27), std::forward<Arg28>(arg28));
 	}
 
-	#pragma endregion
+	#endif // #if USE_CPP0X_COMPATABILITY_TEMPLATES
 	#endif // #if RDE_HAS_CPP11
 
 	size_type erase(const key_type& key)
@@ -635,6 +631,7 @@ private:
 	}
 
 	#if RDE_HAS_CPP11
+
 	template<class K = key_type, class... Args> RDE_FORCEINLINE
 	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, K&& key, Args&&... args)
 	{
@@ -657,7 +654,6 @@ private:
 		return ret_type_t(iterator(n, this), true);
 	}
 	#else
-	#pragma region VS2010_COMPATABILITY_TEMPLATES
 
 	template<class Arg1> RDE_FORCEINLINE
 	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1) {
@@ -1079,7 +1075,7 @@ private:
 		return ret_type_t(iterator(n, this), true);
 	}
 
-	#pragma endregion
+	#endif // #if USE_CPP0X_COMPATABILITY_TEMPLATES
 	#endif // #if RDE_HAS_CPP11
 
 	rde::pair<iterator, bool> insert_at(const value_type& v, node* n, hash_value_t hash)
@@ -1246,7 +1242,7 @@ private:
 	node*			m_nodes;
 	int				m_size;
 	int				m_capacity;
-	std::uint32_t			m_capacityMask;
+	std::uint32_t	m_capacityMask;
 	int				m_numUsed;
 	THashFunc       m_hashFunc;
 	TKeyEqualFunc	m_keyEqualFunc;

@@ -10,6 +10,7 @@ namespace rde
 {
 
 #if RDE_HAS_CPP11
+
 //-----------------------------------------------------------------------------
 // Modern C++ version that does constructor/copy constructor/move constructor in 1
 template<typename T, typename... Args> RDE_FORCEINLINE
@@ -17,9 +18,9 @@ void construct_args(T* p, Args&&... args)
 {
 	::new (static_cast<void*>(p)) T(std::forward<Args>(args)...);
 }
-#else
-#pragma region VS2010_COMPATABILITY_TEMPLATES
 
+#else
+	
 template<typename T, class Arg1> RDE_FORCEINLINE
 void construct_args(T* p, Arg1&& arg1) {
 	::new (static_cast<void*>(p)) T(std::forward<Arg1>(arg1));
@@ -160,7 +161,6 @@ void construct_args(T* p, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Ar
 	::new (static_cast<void*>(p)) T(std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20), std::forward<Arg21>(arg21), std::forward<Arg22>(arg22), std::forward<Arg23>(arg23), std::forward<Arg24>(arg24), std::forward<Arg25>(arg25), std::forward<Arg26>(arg26), std::forward<Arg27>(arg27), std::forward<Arg28>(arg28));
 }
 
-#pragma endregion
 #endif // #if RDE_HAS_CPP11
 
 //-----------------------------------------------------------------------------

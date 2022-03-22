@@ -259,19 +259,20 @@ TEST_CASE("fixed_vector", "[vector]")
 		CHECK(3 == v[2]);
 	}
 
-    SECTION("EmplaceBack")
-    {
-        rde::fixed_vector<rde::pair<int, int>, 8, false> v;
+	SECTION("EmplaceBack")
+	{
+		rde::fixed_vector<rde::pair<int, int>, 8, false> v;
 
-        v.emplace_back(1, 2);
-        v.emplace_back(3, 4);
-        v.emplace_back(5, 6);
+		v.emplace_back(1, 2);
+		v.emplace_back(3, 4);
+		v.emplace_back(5, 6);
 
-        CHECK(3 == v.size());
-        CHECK(v[0].first == 1); CHECK(v[0].second == 2);
-        CHECK(v[1].first == 3); CHECK(v[1].second == 4);
-        CHECK(v[2].first == 5); CHECK(v[2].second == 6);
-    }
+		CHECK(3 == v.size());
+		CHECK(v[0].first == 1); CHECK(v[0].second == 2);
+		CHECK(v[1].first == 3); CHECK(v[1].second == 4);
+		CHECK(v[2].first == 5); CHECK(v[2].second == 6);
+	}
+
 #if RDESTL_RECORD_WATERMARKS
 	SECTION("Watermarks")
 	{
@@ -287,6 +288,7 @@ TEST_CASE("fixed_vector", "[vector]")
 		CHECK(4 == v.get_high_watermark());
 	}
 #endif
+
 #if !RDESTL_STANDALONE && RDE_DEBUG
 	int numFailedAssertions(0);
 	bool AssertionHandler(const char*, const char*, int)
