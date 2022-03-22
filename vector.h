@@ -29,9 +29,15 @@ struct standard_vector_storage
 	{
 	}
 	standard_vector_storage(standard_vector_storage&& rhs)
+#if RDE_HAS_CPP11
 		: m_begin(std::exchange(rhs.m_begin, nullptr)),
 		m_end(std::exchange(rhs.m_end, nullptr)),
 		m_capacityEnd(std::exchange(rhs.m_capacityEnd, nullptr)),
+#else
+		: m_begin(std::exchange(rhs.m_begin, (T*)nullptr)),
+		m_end(std::exchange(rhs.m_end, (T*)nullptr)),
+		m_capacityEnd(std::exchange(rhs.m_capacityEnd, (T*)nullptr)),
+#endif
 		m_allocator(std::move(rhs.m_allocator))
 	{
 	}
@@ -41,9 +47,15 @@ struct standard_vector_storage
 
 	standard_vector_storage& operator=(standard_vector_storage&& rhs)
 	{
+#if RDE_HAS_CPP11
 		m_begin = std::exchange(rhs.m_begin, nullptr);
 		m_end = std::exchange(rhs.m_end, nullptr);
 		m_capacityEnd = std::exchange(rhs.m_capacityEnd, nullptr);
+#else
+m_begin = std::exchange(rhs.m_begin, (T*)nullptr);
+		m_end = std::exchange(rhs.m_end, (T*)nullptr);
+		m_capacityEnd = std::exchange(rhs.m_capacityEnd, (T*)nullptr);
+#endif
 		m_allocator = std::move(rhs.m_allocator);
 		return *this;
 	}
