@@ -1,14 +1,15 @@
 #ifndef RDESTL_HASH_MAP_H
 #define RDESTL_HASH_MAP_H
 
+#include <utility>
+#include <tuple> // TODO use own tuple?
+
+#include "pair.h"
 #include "algorithm.h"
 #include "allocator.h"
 #include "functional.h"
 #include "rhash.h"
 #include "iterator.h"
-#include "pair.h"
-
-#include <tuple> // TODO use own tuple?
 
 namespace rde
 {

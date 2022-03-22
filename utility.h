@@ -1,9 +1,9 @@
 #ifndef RDESTL_UTILITY_H
 #define RDESTL_UTILITY_H
 
+#include <new>
 #include "rdestl_common.h"
 #include "int_to_type.h"
-#include <new>
 
 namespace rde
 {

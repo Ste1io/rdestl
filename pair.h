@@ -7,11 +7,8 @@
 //#define RDESTL_USE_STD_PAIR 1
 #endif
 
-#include "type_traits.h"
-
-#ifdef RDESTL_USE_STD_PAIR
 #include <utility>
-#endif
+#include "type_traits.h"
 
 namespace rde
 {

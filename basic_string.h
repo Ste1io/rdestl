@@ -1,8 +1,8 @@
 #ifndef RDESTL_BASIC_STRING_H
 #define RDESTL_BASIC_STRING_H
 
-#include "allocator.h"
 #include "rdestl_common.h"
+#include "allocator.h"
 #include "simple_string_storage.h"
 #include "string_utils.h"
 
