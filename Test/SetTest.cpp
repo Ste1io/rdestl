@@ -15,7 +15,7 @@ TEST_CASE("set", "[set]")
 	{
 		rde::set<int> t;
 		t.insert(5);
-		rde::set<int>::iterator it = t.begin();             
+		rde::set<int>::iterator it = t.begin();
 		CHECK(it != t.end());
 		CHECK(5 == *it);
 	}
@@ -48,4 +48,4 @@ TEST_CASE("set", "[set]")
 		CHECK(0 == t.size());
 	}
 }
-}
+} //namespace
