@@ -16,7 +16,6 @@ public:
 		m_bufferTop(0),
 		m_bufferSize(bufferSize)
 	{
-		/**/
 	}
 
 	void* allocate(size_t bytes, int /*flags*/ = 0)

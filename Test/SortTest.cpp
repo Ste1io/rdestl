@@ -125,7 +125,6 @@ TEST_CASE("sort", "[algorithm]")
 		CHECK(rde::is_sorted(foo.begin(), foo.end(), rde::less<int>()));
 	}
 
-
 #if !RDESTL_STANDALONE && SORT_SPEED_TEST
 	struct Foo
 	{
@@ -202,6 +201,7 @@ TEST_CASE("sort", "[algorithm]")
 			double(ticks) / N);
 		CHECK(rde::is_sorted(data, data + N, rde::less<Foo>()));
 	}
-#endif
+#endif // #if !RDESTL_STANDALONE && SORT_SPEED_TEST
+
 }
-}
+} // namespace

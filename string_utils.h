@@ -15,7 +15,7 @@ template<typename T> int strlen(const T* str)
 //-----------------------------------------------------------------------------
 template<typename T> int strcompare(const T* s1, const T* s2, size_t len)
 {
-	for (/**/; len != 0; --len)
+	for (; len != 0; --len)
 	{
 		const T c1 = *s1;
 		const T c2 = *s2;

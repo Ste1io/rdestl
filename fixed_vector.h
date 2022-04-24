@@ -26,7 +26,6 @@ struct fixed_vector_storage
 		, m_max_size(0)
 #endif
 	{
-		/**/
 	}
 	explicit fixed_vector_storage(e_noinitialize)
 	{
@@ -117,48 +116,40 @@ struct fixed_vector_storage
 };
 
 //=============================================================================
-template<typename T, int TCapacity, bool TGrowOnOverflow,
-	class TAllocator = rde::allocator
->
+template<typename T, int TCapacity, bool TGrowOnOverflow, class TAllocator = rde::allocator>
 class fixed_vector: public vector<T, TAllocator,
 	fixed_vector_storage<T, TAllocator, TCapacity, TGrowOnOverflow>
 >
 {
 	typedef vector<T, TAllocator,
-		fixed_vector_storage<
-		T, TAllocator, TCapacity, TGrowOnOverflow
-		>
+		fixed_vector_storage<T, TAllocator, TCapacity, TGrowOnOverflow>
 	>                                       base_vector;
 	typedef TAllocator                      allocator_type;
 	typedef typename base_vector::size_type size_type;
 	typedef T                               value_type;
+
 public:
 	explicit fixed_vector(const allocator_type& allocator = allocator_type())
 		: base_vector(allocator)
 	{
-		/**/
 	}
 	explicit fixed_vector(size_type initialSize, const allocator_type& allocator = allocator_type())
 		: base_vector(initialSize, allocator)
 	{
-		/**/
 	}
 	fixed_vector(const T* first, const T* last, const allocator_type& allocator = allocator_type())
 		: base_vector(first, last, allocator)
 	{
-		/**/
 	}
 	// @note: allocator is not copied from rhs.
 	// @note: will not perform default constructor for newly created objects.
 	fixed_vector(const fixed_vector& rhs, const allocator_type& allocator = allocator_type())
 		: base_vector(rhs, allocator)
 	{
-		/**/
 	}
 	explicit fixed_vector(e_noinitialize n)
 		: base_vector(n)
 	{
-		/**/
 	}
 
 	fixed_vector& operator=(const fixed_vector& rhs)

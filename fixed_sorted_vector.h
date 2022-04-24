@@ -21,7 +21,6 @@ public:
 	explicit fixed_sorted_vector(const allocator_type& allocator = allocator_type())
 		: sorted_vector(allocator)
 	{
-		/**/
 	}
 };
 

@@ -16,34 +16,33 @@ namespace rde
 #ifdef RDESTL_USE_STD_PAIR
 template<typename T1, typename T2>
 using pair = std::pair<T1, T2>;
-#else
+#else // ^^ #ifdef RDESTL_USE_STD_PAIR
 
-//=============================================================================
 template<typename T1, typename T2>
 struct pair
 {
 	typedef T1	first_type;
 	typedef T2	second_type;
 
-	pair() { /**/ }
-	pair(const T1& a, const T2& b): first(a), second(b) { /**/ }
-	explicit pair(const T1& a): first(a) { /**/ }
+	pair() { }
+	pair(const T1& a, const T2& b): first(a), second(b) { }
+	explicit pair(const T1& a): first(a) { }
 
-	pair(const pair<T1, T2>& rhs): first(rhs.first), second(rhs.second) { /**/ }
-	pair(pair<T1, T2>&& rhs): first(std::move(rhs.first)), second(std::move(rhs.second)) { /**/ }
+	pair(const pair<T1, T2>& rhs): first(rhs.first), second(rhs.second) { }
+	pair(pair<T1, T2>&& rhs): first(std::move(rhs.first)), second(std::move(rhs.second)) { }
 
 #if RDE_HAS_CPP11
 	template<class... Args2>
 	pair(T1&& first_args, Args2&&... second_args)
 		: first(std::forward<T1>(first_args))
-		, second(std::forward<Args2>(second_args)...) { /**/ }
+		, second(std::forward<Args2>(second_args)...) { }
 #else
 	// TODO Regression tests for VS2010
 	template<class T1, class T2>
 	pair(T1&& arg1, T2&& arg2)
 		: first(std::forward<T1>(arg1))
-		, second(std::forward<T2>(arg2)) { /**/ }
-#endif // #if RDE_HAS_CPP11
+		, second(std::forward<T2>(arg2)) { }
+#endif
 
 	pair& operator=(const pair<T1, T2>& rhs)
 	{
@@ -62,7 +61,7 @@ struct pair
 	T2	second;
 };
 
-#endif // #ifdef RDESTL_USE_STD_PAIR
+#endif // #ifndef RDESTL_USE_STD_PAIR
 
 //=============================================================================
 // Pair is POD if every element is POD/fundamental
@@ -75,7 +74,6 @@ struct is_pod<pair<T1, T2>>
 	};
 };
 
-//-----------------------------------------------------------------------------
 template<typename T1, typename T2>
 pair<T1, T2> make_pair(const T1& a, const T2& b)
 {
@@ -84,5 +82,4 @@ pair<T1, T2> make_pair(const T1& a, const T2& b)
 
 } // namespace rde
 
-//-----------------------------------------------------------------------------
 #endif // #ifndef RDESTL_PAIR_H

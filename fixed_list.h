@@ -59,13 +59,12 @@ private:
 		typedef bidirectional_iterator_tag	iterator_category;
 
 		explicit node_iterator(TNodePtr node, const fixed_list* list)
-			: m_node(node), m_list(list) { /**/ }
+			: m_node(node), m_list(list) { }
 		template<typename UNodePtr, typename UPtr, typename URef>
 		node_iterator(const node_iterator<UNodePtr, UPtr, URef>& rhs)
 			: m_node(rhs.node()),
 			m_list(rhs.list())
 		{
-			/**/
 		}
 
 		TRef operator*() const
@@ -149,7 +148,6 @@ public:
 	}
 	explicit fixed_list(e_noinitialize)
 	{
-		/**/
 	}
 	~fixed_list()
 	{

@@ -52,7 +52,6 @@ public:
 			: m_node(node),
 			m_map(map)
 		{
-			/**/
 		}
 
 		// const/non-const iterator copy ctor
@@ -61,7 +60,6 @@ public:
 			: m_node(rhs.node()),
 			m_map(rhs.get_map())
 		{
-			 /**/
 		}
 		TRef operator*() const					{ RDE_ASSERT(m_node != 0); return m_node->data; }
 		TPtr operator->() const					{ return &m_node->data; }
@@ -130,7 +128,6 @@ public:
 		m_numUsed(0),
 		m_allocator(allocator)
 	{
-		/**/
 	}
 	explicit hash_map(size_type initial_bucket_count, const allocator_type& allocator = allocator_type())
 		: m_nodes(&ms_emptyNode),
@@ -266,7 +263,7 @@ public:
 		return emplace_at(n, hash, std::forward<K>(key), std::forward<Args>(args)...);
 	}
 
-#else
+#else // ^^ #if RDE_HAS_CPP11
 
 #if !USE_CPP0X_COMPATABILITY_TEMPLATES
 
@@ -281,7 +278,7 @@ public:
 		return emplace_at(n, hash, std::forward<TKey>(key), std::forward<TValue>(value));
 	}
 
-#else
+#else // ^^ #if !USE_CPP0X_COMPATABILITY_TEMPLATES
 
 // NOTE VC100 won't compile default template arguments for methods (error C4519). I've removed the key_type template argument
 // used in `emplace` and `emplace_at`; afaik it shouldn't be necessary when not parameter packing anyways...
@@ -539,7 +536,7 @@ public:
 	}
 
 #endif // #if USE_CPP0X_COMPATABILITY_TEMPLATES
-#endif // #if RDE_HAS_CPP11
+#endif // #if !RDE_HAS_CPP11
 
 	size_type erase(const key_type& key)
 	{
@@ -663,7 +660,7 @@ private:
 		return ret_type_t(iterator(n, this), true);
 	}
 
-#else
+#else // ^^ #if RDE_HAS_CPP11
 
 #if !USE_CPP0X_COMPATABILITY_TEMPLATES
 
@@ -686,7 +683,7 @@ private:
 		return ret_type_t(iterator(n, this), true);
 	}
 
-#else
+#else // ^^ #if !USE_CPP0X_COMPATABILITY_TEMPLATES
 
 	template<class Arg1> RDE_FORCEINLINE
 		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1) {
@@ -1109,7 +1106,7 @@ private:
 	}
 
 #endif // #if USE_CPP0X_COMPATABILITY_TEMPLATES
-#endif // #if RDE_HAS_CPP11
+#endif // #if !RDE_HAS_CPP11
 
 	rde::pair<iterator, bool> insert_at(const value_type& v, node* n, hash_value_t hash)
 	{

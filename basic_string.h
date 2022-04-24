@@ -31,30 +31,25 @@ public:
 	explicit basic_string(const allocator_type& allocator = allocator_type())
 		: TStorage(allocator)
 	{
-		/**/
 	}
 	// yeah, EXPLICIT.
 	explicit basic_string(const value_type* str,
 		const allocator_type& allocator = allocator_type())
 		: TStorage(str, allocator)
 	{
-		/**/
 	}
 	basic_string(const value_type* str, size_type len,
 		const allocator_type& allocator = allocator_type())
 		: TStorage(str, len, allocator)
 	{
-		/**/
 	}
 	basic_string(const basic_string& str,
 		const allocator_type& allocator = allocator_type())
 		: TStorage(str, allocator)
 	{
-		/**/
 	}
 	~basic_string()
 	{
-		/**/
 	}
 
 	size_type capacity() const { return TStorage::capacity(); }

@@ -28,11 +28,10 @@ public:
 	typedef Reference					reference;
 	typedef bidirectional_iterator_tag	iterator_category;
 
-	intrusive_list_iterator(): m_node(0) { /**/ }
+	intrusive_list_iterator(): m_node(0) { }
 	explicit intrusive_list_iterator(Pointer iterNode)
 		: m_node(iterNode)
 	{
-		/**/
 	}
 
 	Reference operator*() const

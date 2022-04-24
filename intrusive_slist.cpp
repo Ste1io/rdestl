@@ -4,7 +4,6 @@ namespace rde
 {
 	intrusive_slist_base::intrusive_slist_base()
 	{
-		/**/
 	}
 
 	intrusive_slist_base::size_type intrusive_slist_base::size() const

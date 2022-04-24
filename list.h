@@ -53,15 +53,14 @@ private:
 	public:
 		typedef bidirectional_iterator_tag	iterator_category;
 
-		explicit node_iterator(): m_node(NULL) { /**/ }
+		explicit node_iterator(): m_node(NULL) { }
 
-		explicit node_iterator(TNodePtr node): m_node(node) { /**/ }
+		explicit node_iterator(TNodePtr node): m_node(node) { }
 
 		template<typename UNodePtr, typename UPtr, typename URef>
 		node_iterator(const node_iterator<UNodePtr, UPtr, URef>& rhs)
 			: m_node(rhs.node())
 		{
-			/**/
 		}
 
 		TRef operator*() const
@@ -101,14 +100,8 @@ private:
 			return copy;
 		}
 
-		bool operator==(const node_iterator& rhs) const
-		{
-			return rhs.m_node == m_node;
-		}
-		bool operator!=(const node_iterator& rhs) const
-		{
-			return !(rhs == *this);
-		}
+		bool operator==(const node_iterator& rhs) const { return rhs.m_node == m_node; }
+		bool operator!=(const node_iterator& rhs) const { return !(rhs == *this); }
 
 	private:
 		TNodePtr	m_node;

@@ -10,19 +10,16 @@ class allocator
 public:
 	explicit allocator(const char* name = "DEFAULT"): m_name(name) { }
 
+	~allocator() { }
+
 #if RDE_HAS_CPP11
 	allocator(const allocator&) = default;
 	allocator(allocator&&) = default;
-#else
-	//allocator(const allocator&);
-	//allocator(allocator&&);
-#endif
-
-	~allocator() {}
-
-#if RDE_HAS_CPP11
 	allocator& operator=(const allocator&) = default;
 #else
+	// TODO allocator default copy/move
+	//allocator(const allocator&);
+	//allocator(allocator&&);
 	//allocator& operator=(const allocator&);
 #endif
 

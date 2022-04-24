@@ -18,7 +18,6 @@ public:
 		: m_name(name),
 		m_bufferTop(0)
 	{
-		/**/
 	}
 
 	void* allocate(size_t bytes, int /*flags*/ = 0)

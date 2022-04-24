@@ -9,8 +9,7 @@ namespace rde
 namespace internal
 {
 #pragma warning(push)
-// structure was padded due to __declspec(align())
-#pragma warning(disable: 4324)
+#pragma warning(disable: 4324) // structure was padded due to __declspec(align())
 
 template<typename T>
 struct alignof_helper
@@ -31,7 +30,7 @@ template<size_t N> struct type_with_alignment
 {
 	typedef char err_invalid_alignment[N > 0 ? -1 : 1];
 };
-template<> struct type_with_alignment<0> {};
+template<> struct type_with_alignment<0> { };
 template<> struct type_with_alignment<1> { std::uint8_t member; };
 template<> struct type_with_alignment<2> { std::uint16_t member; };
 template<> struct type_with_alignment<4> { std::uint32_t member; };

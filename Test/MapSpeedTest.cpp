@@ -56,7 +56,7 @@ namespace
 			return s1 < s2;
 		}
 		hasher h;
-	}; 
+	};
 	// STL hashmap
 	typedef stdext::hash_map<std::string, int, mycomp>	tMap4;
 	// STL map
@@ -87,7 +87,7 @@ namespace
 	template<typename TMap>
 	void ReportMemUsage(const TMap& m)
 	{
-		ReportMemUsage(m, 
+		ReportMemUsage(m,
 			rde::int_to_type<HasUsedMemoryMethod<TMap>::Has>());
 	}
 
@@ -166,7 +166,7 @@ namespace
 	void MapSpeedTest()
 	{
 		const int kNumTests = 10;
-		ProfileResult results[] = 
+		ProfileResult results[] =
 		{
 			ProfileResult("RDE closed hashmap, pow2 num of buckets"),
 			ProfileResult("RDE, no caching"),
@@ -186,12 +186,12 @@ namespace
 		}
 		for (int i = 0; i < RDE_ARRAY_COUNT(results); ++i)
 		{
-			rde::Console::Printf("%d: %s: enumeration %dms, find %dms, remove %dms, total: %dms\n", i, 
+			rde::Console::Printf("%d: %s: enumeration %dms, find %dms, remove %dms, total: %dms\n", i,
 				results[i].name.c_str(),
 				results[i].enumTime, results[i].findTime, results[i].removeTime,
 				(results[i].enumTime + results[i].findTime + results[i].removeTime));
 		}
-	} 
+	}
 
 struct eqstr {
 	inline bool operator()(const char *s1, const char *s2) const {
@@ -216,15 +216,15 @@ struct eqstr {
 
 
 	typedef rde::hash_map<unsigned, int> inthash;
-	typedef rde::hash_map<const char*, int, hasher2, 4, eqstr> strhash; 
-	typedef rde::hash_map<const char*, int, hasher2, 6, eqstr> strhash2; 
+	typedef rde::hash_map<const char*, int, hasher2, 4, eqstr> strhash;
+	typedef rde::hash_map<const char*, int, hasher2, 6, eqstr> strhash2;
 
 	int test_int(int N, const unsigned *data)
 	{
 		int i, ret;
 		inthash *h = new inthash;
 		for (i = 0; i < N; ++i) {
-			
+
 			rde::pair<inthash::iterator, bool> p = h->insert(rde::pair<unsigned, int>(data[i], i));
 			if (p.second == false) h->erase(p.first);
 		}
@@ -245,8 +245,8 @@ struct eqstr {
 		ret = h->size();
 		ReportMemUsage(*h);
 		delete h;
-		return ret; 
-	} 
+		return ret;
+	}
 	int test_str3(int N, char * const *data)
 	{
 		int i, ret;
@@ -258,14 +258,14 @@ struct eqstr {
 		ret = h->size();
 		ReportMemUsage(*h);
 		delete h;
-		return ret; 
-	} 
+		return ret;
+	}
 
 	static int data_size = 5000000;//000;
 	static unsigned *int_data;
-	static char **str_data; 
+	static char **str_data;
 	void udb_init_data()
-	{	
+	{
 		int i;
 		char buf[256];
 		rde::Console::Printf("[benchmark] generating data... ");
@@ -279,7 +279,7 @@ struct eqstr {
 			str_data[i] = strdup(buf);
 		}
 		printf("done!\n");
-	} 
+	}
 KHASH_MAP_INIT_INT(int, int)
 KHASH_MAP_INIT_STR(str, int)
 
@@ -297,7 +297,7 @@ int test_int2(int N, const unsigned *data)
 	ret = (int)kh_size(h);
 	kh_destroy(int, h);
 	return ret;
-} 
+}
 int test_intstd(int N, const unsigned *data)
 {
 		int i, ret;
@@ -328,7 +328,7 @@ int test_intg(int N, const unsigned *data)
 	delete h;
 	return ret;
 }
- 
+
 
 int test_str2(int N, char * const *data)
 {
@@ -344,7 +344,7 @@ int test_str2(int N, char * const *data)
 	ret = (int)kh_size(h);
 	kh_destroy(str, h);
 	return ret;
-} 
+}
 } // namespace
 
 void Map_SpeedTest()
@@ -397,10 +397,7 @@ void Map_SpeedTest()
 	//r = test_str3(data_size, str_data);
 	//timer.Stop();
 	//rde::Console::Printf("Str test: %d [%d]\n", timer.GetTimeInMs(), r);
-#endif
+#endif // #if 0
 }
 
-#endif
-
-
-
+#endif // #if !RDESTL_STANDALONE

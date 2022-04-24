@@ -5,7 +5,6 @@ namespace rde
 	intrusive_list_base::intrusive_list_base()
 		: m_root()
 	{
-		/**/
 	}
 
 	intrusive_list_base::size_type intrusive_list_base::size() const

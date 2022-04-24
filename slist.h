@@ -48,12 +48,11 @@ private:
 	public:
 		typedef forward_iterator_tag	iterator_category;
 
-		explicit node_iterator(TNodePtr node): m_node(node) { /**/ }
+		explicit node_iterator(TNodePtr node): m_node(node) { }
 		template<typename UNodePtr, typename UPtr, typename URef>
 		node_iterator(const node_iterator<UNodePtr, UPtr, URef>& rhs)
 			: m_node(rhs.node())
 		{
-			/**/
 		}
 
 		TRef operator*() const

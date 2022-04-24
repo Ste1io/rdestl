@@ -51,6 +51,7 @@ namespace
 		CHECK(6 == *it);
 		CHECK(888 == lst.back());
 	}
+
 #if !RDESTL_STANDALONE
 	// Tests if list can be copied by memcopying.
 	TEST_CASE("FixedListRelocation")
@@ -84,6 +85,7 @@ namespace
 
 		}
 	};
+
 #if 0
 	TEST_CASE("FixedListVersusVectorPerformance")
 	{
@@ -127,7 +129,7 @@ namespace
 
 		CHECK(1 == 1);	// Just to shut compiler up (unused variable testResults).
 	}
-#endif
+#endif // #if 0
 
-#endif // RDESTL_STANDALONE
+#endif // #if !RDESTL_STANDALONE
 }

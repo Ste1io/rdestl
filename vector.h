@@ -27,18 +27,17 @@ struct standard_vector_storage
 		m_capacityEnd(0),
 		m_allocator(allocator)
 	{
-		/**/
 	}
 	standard_vector_storage(standard_vector_storage&& rhs)
 #if RDE_HAS_CPP11
 		: m_begin(std::exchange(rhs.m_begin, nullptr)),
 		m_end(std::exchange(rhs.m_end, nullptr)),
 		m_capacityEnd(std::exchange(rhs.m_capacityEnd, nullptr)),
-#else
+#else // ^^ #if RDE_HAS_CPP11
 		: m_begin(std::exchange(rhs.m_begin, (T*)nullptr)),
 		m_end(std::exchange(rhs.m_end, (T*)nullptr)),
 		m_capacityEnd(std::exchange(rhs.m_capacityEnd, (T*)nullptr)),
-#endif
+#endif // #if !RDE_HAS_CPP11
 		m_allocator(std::move(rhs.m_allocator))
 	{
 	}
@@ -52,11 +51,11 @@ struct standard_vector_storage
 		m_begin = std::exchange(rhs.m_begin, nullptr);
 		m_end = std::exchange(rhs.m_end, nullptr);
 		m_capacityEnd = std::exchange(rhs.m_capacityEnd, nullptr);
-#else
+#else // ^^ #if RDE_HAS_CPP11
 m_begin = std::exchange(rhs.m_begin, (T*)nullptr);
 		m_end = std::exchange(rhs.m_end, (T*)nullptr);
 		m_capacityEnd = std::exchange(rhs.m_capacityEnd, (T*)nullptr);
-#endif
+#endif // #if !RDE_HAS_CPP11
 		m_allocator = std::move(rhs.m_allocator);
 		return *this;
 	}
@@ -145,7 +144,6 @@ public:
 	explicit vector(const allocator_type& allocator = allocator_type())
 		: TStorage(allocator)
 	{
-		/**/
 	}
 	explicit vector(size_type initialSize, const allocator_type& allocator = allocator_type())
 		: TStorage(allocator)
@@ -312,9 +310,13 @@ public:
 		TStorage::record_high_watermark();
 	}
 
-	#else
+	#else // ^^ #if RDE_HAS_CPP11
 
 	#if !USE_CPP0X_COMPATABILITY_TEMPLATES
+
+	//...
+
+	#else // ^^ #if !USE_CPP0X_COMPATABILITY_TEMPLATES
 
 	template<class Arg1>
 	void emplace_back(Arg1&& arg1) {
@@ -541,7 +543,7 @@ public:
 	}
 
 	#endif // #if USE_CPP0X_COMPATABILITY_TEMPLATES
-	#endif // #if RDE_HAS_CPP11
+	#endif // #if !RDE_HAS_CPP11
 
 	void assign(const T* first, const T* last)
 	{

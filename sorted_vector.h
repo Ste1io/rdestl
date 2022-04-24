@@ -52,7 +52,6 @@ public:
 	explicit sorted_vector(const allocator_type& allocator = allocator_type())
 		: Base(allocator)
 	{
-		/**/
 	}
 	template <class InputIterator>
 	sorted_vector(InputIterator first, InputIterator last,

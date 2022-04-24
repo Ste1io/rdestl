@@ -120,7 +120,7 @@ TEST_CASE("map", "[map]")
 		bool hadElement[4] = { false, false, false, false };
 		tMap m(&data4[0], &data4[4]);
 		tMap::const_iterator it = m.begin();
-		for (/**/; it != m.end(); ++it)
+		for (; it != m.end(); ++it)
 		{
 			CHECK(it->first >= 1); CHECK(it->first <= 4);
 			hadElement[it->first - 1] = true;
@@ -136,7 +136,7 @@ TEST_CASE("map", "[map]")
 		m.erase(2);
 		bool hadElement[4] = { false, false, false, false };
 		tMap::const_iterator it = m.begin();
-		for (/**/; it != m.end(); ++it)
+		for (; it != m.end(); ++it)
 		{
 			CHECK(it->first >= 1); CHECK(it->first <= 4);
 			hadElement[it->first - 1] = true;
@@ -157,7 +157,7 @@ TEST_CASE("map", "[map]")
 		CHECK(4 == m2.size());
 		bool hadElement[4] = { false, false, false, false };
 		tMap::const_iterator it = m2.begin();
-		for (/**/; it != m2.end(); ++it)
+		for (; it != m2.end(); ++it)
 		{
 			CHECK(it->first >= 1); CHECK(it->first <= 4);
 			hadElement[it->first - 1] = true;

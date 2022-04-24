@@ -73,7 +73,7 @@ TEST_CASE("slist", "[list]")
 		CHECK(1 == lst.front());
 		rde::slist<int>::iterator it = lst.begin();
 		int i(1);
-		for (/**/; it != lst.end(); ++it, ++i)
+		for (; it != lst.end(); ++it, ++i)
 		{
 			CHECK(i*i == *it);
 		}
@@ -88,7 +88,7 @@ TEST_CASE("slist", "[list]")
 		CHECK(1 == lst2.front());
 		rde::slist<int>::iterator it = lst.begin();
 		int i(1);
-		for (/**/; it != lst.end(); ++it, ++i)
+		for (; it != lst.end(); ++it, ++i)
 		{
 			CHECK(i*i == *it);
 		}
