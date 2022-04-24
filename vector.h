@@ -27,6 +27,7 @@ struct standard_vector_storage
 		m_capacityEnd(0),
 		m_allocator(allocator)
 	{
+		/**/
 	}
 	standard_vector_storage(standard_vector_storage&& rhs)
 #if RDE_HAS_CPP11
@@ -120,8 +121,7 @@ m_begin = std::exchange(rhs.m_begin, (T*)nullptr);
 //=============================================================================
 // Simplified vector class.
 // Mimics std::vector.
-template<
-	typename T,
+template<typename T,
 	class TAllocator = rde::allocator,
 	class TStorage   = standard_vector_storage<T, TAllocator>
 >
@@ -313,7 +313,7 @@ public:
 	}
 
 	#else
-	
+
 	#if !USE_CPP0X_COMPATABILITY_TEMPLATES
 
 	template<class Arg1>
@@ -564,6 +564,7 @@ public:
 	void insert(int index, size_type n, const T& val)
 	{
 		RDE_ASSERT(invariant());
+		RDE_ASSERT(index >= 0); // FIXME: Having to use signed type for index param currently to prevent ambiguous overload matching ~SK
 		const size_type indexEnd = index + n;
 		const size_type prevSize = size();
 		if (m_end + n > m_capacityEnd)
@@ -606,6 +607,8 @@ public:
 	}
 	iterator insert(iterator it, const T& val)
 	{
+		//return emplace(it, val);
+
 		RDE_ASSERT(validate_iterator(it));
 		RDE_ASSERT(invariant());
 		// @todo: optimize for toMove==0 --> push_back here?
@@ -722,6 +725,10 @@ public:
 	{
 		TStorage::reset();
 		RDE_ASSERT(invariant());
+	}
+	void shrink_to_fit()
+	{
+		reallocate(size(), size());
 	}
 
 	// Extension: allows to limit amount of allocated memory.

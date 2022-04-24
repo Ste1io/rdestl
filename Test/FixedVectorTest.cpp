@@ -3,20 +3,19 @@
 #include "fixed_vector.h"
 #include "vendor/Catch/catch.hpp"
 
-
 namespace
 {
-	typedef rde::fixed_vector<int, 64, true>			tTestVector;
-	typedef rde::fixed_vector<std::string, 64, true>	tStringVector;
+typedef rde::fixed_vector<int, 64, true>			tTestVector;
+typedef rde::fixed_vector<std::string, 64, true>	tStringVector;
 
-	const int array [] = { 1, 4, 9, 16, 25, 36 };
+const int array[] ={ 1, 4, 9, 16, 25, 36 };
 
-	void PrintVector(const tStringVector& v)
-	{
-		for (tStringVector::const_iterator it = v.begin(); it != v.end(); ++it)
-			printf("%s, ", it->c_str());
-		printf("\n");
-	}
+void PrintVector(const tStringVector& v)
+{
+	for (tStringVector::const_iterator it = v.begin(); it != v.end(); ++it)
+		printf("%s, ", it->c_str());
+	printf("\n");
+}
 
 TEST_CASE("fixed_vector", "[vector]")
 {
@@ -24,7 +23,6 @@ TEST_CASE("fixed_vector", "[vector]")
 	{
 		rde::fixed_vector<__m128, 1, false> v;
 		rde::aligned_as<__m128>::res r;
-		(void)r;
 		CHECK(16ul == sizeof(r));
 		CHECK(16ul == sizeof(__m128));
 		CHECK(16 == rde::rde_alignof<__m128>::res);
@@ -91,7 +89,7 @@ TEST_CASE("fixed_vector", "[vector]")
 		CHECK(0 == v.size());
 		CHECK(v.empty());
 		// Make sure it doesnt free mem.
-		CHECK(v.capacity() > 0);
+		CHECK(v.capacity() != 0);
 	}
 
 	SECTION("EraseBegin")
@@ -123,7 +121,6 @@ TEST_CASE("fixed_vector", "[vector]")
 		tTestVector::iterator it = v.erase(v.begin() + 1); // 4
 		CHECK(9 == *it);
 		v.erase(it + 1); // 16
-
 		CHECK(4 == v.size());
 		//PrintVector(v);
 	}
@@ -234,7 +231,7 @@ TEST_CASE("fixed_vector", "[vector]")
 		tTestVector v(array, array + 6);
 		tTestVector v2(v);
 		CHECK(6 == v2.size());
-		CHECK(memcmp(v.begin(), v2.begin(), 6*sizeof(int)) == 0);
+		CHECK(memcmp(v.begin(), v2.begin(), 6 * sizeof(int)) == 0);
 	}
 
 	SECTION("AssignmentOp")
@@ -243,7 +240,7 @@ TEST_CASE("fixed_vector", "[vector]")
 		tTestVector v2;
 		v2 = v;
 		CHECK(6 == v2.size());
-		CHECK(memcmp(v.begin(), v2.begin(), 6*sizeof(int)) == 0);
+		CHECK(memcmp(v.begin(), v2.begin(), 6 * sizeof(int)) == 0);
 	}
 
 	SECTION("Reserve")
@@ -307,4 +304,4 @@ TEST_CASE("fixed_vector", "[vector]")
 	}
 #endif
 }
-}
+} //namespace

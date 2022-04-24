@@ -16,9 +16,9 @@ namespace rde
 
 // Load factor is 7/8th.
 template<typename TKey, typename TValue,
-	class THashFunc = rde::hash<TKey>,
-	class TKeyEqualFunc = rde::equal_to<TKey>,
-	class TAllocator = rde::allocator
+	class THashFunc		= rde::hash<TKey>,
+	class TKeyEqualFunc	= rde::equal_to<TKey>,
+	class TAllocator	= rde::allocator
 >
 class hash_map
 {
@@ -34,7 +34,7 @@ public:
 		node(): hash(kUnusedHash) {}
 
 		RDE_FORCEINLINE bool is_unused() const		{ return hash == kUnusedHash; }
-		RDE_FORCEINLINE bool is_deleted() const     { return hash == kDeletedHash; }
+		RDE_FORCEINLINE bool is_deleted() const		{ return hash == kDeletedHash; }
 		RDE_FORCEINLINE bool is_occupied() const	{ return hash < kDeletedHash; }
 
 		hash_value_t    hash;
@@ -63,19 +63,9 @@ public:
 		{
 			 /**/
 		}
-		TRef operator*() const
-		{
-			RDE_ASSERT(m_node != 0);
-			return m_node->data;
-		}
-		TPtr operator->() const
-		{
-			return &m_node->data;
-		}
-		RDE_FORCEINLINE TNodePtr node() const
-		{
-			return m_node;
-		}
+		TRef operator*() const					{ RDE_ASSERT(m_node != 0); return m_node->data; }
+		TPtr operator->() const					{ return &m_node->data; }
+		RDE_FORCEINLINE TNodePtr node() const	{ return m_node; }
 
 		node_iterator& operator++()
 		{
@@ -91,27 +81,23 @@ public:
 			return copy;
 		}
 
-		RDE_FORCEINLINE bool operator==(const node_iterator& rhs) const
-		{
-			return rhs.m_node == m_node;
-		}
-		bool operator!=(const node_iterator& rhs) const
-		{
-			return !(rhs == *this);
-		}
+		RDE_FORCEINLINE bool operator==(const node_iterator& rhs) const { return rhs.m_node == m_node; }
+		RDE_FORCEINLINE bool operator!=(const node_iterator& rhs) const { return !(rhs == *this); }
 
 		const hash_map* get_map() const { return m_map; }
+
 	private:
 		void move_to_next_occupied_node()
 		{
 			// @todo: save nodeEnd in constructor?
 			TNodePtr nodeEnd = m_map->m_nodes + m_map->bucket_count();
-			for (/**/; m_node < nodeEnd; ++m_node)
+			for (; m_node < nodeEnd; ++m_node)
 			{
 				if (m_node->is_occupied())
 					break;
 			}
 		}
+
 		TNodePtr		m_node;
 		const hash_map*	m_map;
 	};
@@ -122,7 +108,8 @@ public:
 	typedef TAllocator															allocator_type;
 	typedef node_iterator<node*, value_type*, value_type&>						iterator;
 	typedef node_iterator<const node*, const value_type*, const value_type&>	const_iterator;
-	typedef int																	size_type;
+	typedef size_t																size_type;
+
 	static const size_type														kNodeSize = sizeof(node);
 	static const size_type														kInitialCapacity = 64;
 
@@ -143,6 +130,7 @@ public:
 		m_numUsed(0),
 		m_allocator(allocator)
 	{
+		/**/
 	}
 	explicit hash_map(size_type initial_bucket_count, const allocator_type& allocator = allocator_type())
 		: m_nodes(&ms_emptyNode),
@@ -251,6 +239,8 @@ public:
 
 	rde::pair<iterator, bool> insert(const value_type& v)
 	{
+		//return emplace(v.first, v.second);
+
 		RDE_ASSERT(invariant());
 		if (m_numUsed * 8 >= m_capacity * 7)
 			grow();
@@ -258,11 +248,10 @@ public:
 		hash_value_t hash;
 		node* n = find_for_insert(v.first, &hash);
 
-		//return emplace_at(n, hash, v.first, v.second);
 		return insert_at(v, n, hash);
 	}
 
-	#if RDE_HAS_CPP11
+#if RDE_HAS_CPP11
 
 	template<class K = key_type, class... Args>
 	rde::pair<iterator, bool> emplace(K&& key, Args&&... args)
@@ -277,9 +266,9 @@ public:
 		return emplace_at(n, hash, std::forward<K>(key), std::forward<Args>(args)...);
 	}
 
-	#else
+#else
 
-	#if !USE_CPP0X_COMPATABILITY_TEMPLATES
+#if !USE_CPP0X_COMPATABILITY_TEMPLATES
 
 	rde::pair<iterator, bool> emplace(TKey&& key, TValue&& value) {
 		RDE_ASSERT(invariant());
@@ -292,10 +281,10 @@ public:
 		return emplace_at(n, hash, std::forward<TKey>(key), std::forward<TValue>(value));
 	}
 
-	#else
+#else
 
-	// NOTE VC100 won't compile default template arguments for methods (error C4519). I've removed the key_type template argument
-	// used in `emplace` and `emplace_at`; afaik it shouldn't be necessary when not parameter packing anyways...
+// NOTE VC100 won't compile default template arguments for methods (error C4519). I've removed the key_type template argument
+// used in `emplace` and `emplace_at`; afaik it shouldn't be necessary when not parameter packing anyways...
 
 	template<class Arg1>
 	rde::pair<iterator, bool> emplace(key_type&& key, Arg1&& arg1) {
@@ -549,8 +538,8 @@ public:
 		return emplace_at(n, hash, std::forward<key_type>(key), std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20), std::forward<Arg21>(arg21), std::forward<Arg22>(arg22), std::forward<Arg23>(arg23), std::forward<Arg24>(arg24), std::forward<Arg25>(arg25), std::forward<Arg26>(arg26), std::forward<Arg27>(arg27), std::forward<Arg28>(arg28));
 	}
 
-	#endif // #if USE_CPP0X_COMPATABILITY_TEMPLATES
-	#endif // #if RDE_HAS_CPP11
+#endif // #if USE_CPP0X_COMPATABILITY_TEMPLATES
+#endif // #if RDE_HAS_CPP11
 
 	size_type erase(const key_type& key)
 	{
@@ -573,7 +562,7 @@ public:
 	}
 	void erase(iterator from, iterator to)
 	{
-		for (/**/; from != to; ++from)
+		for (; from != to; ++from)
 		{
 			node* n = from.node();
 			if (n->is_occupied())
@@ -625,10 +614,7 @@ public:
 	size_type size() const					{ return m_size; }
 	size_type empty() const					{ return size() == 0; }
 	size_type nonempty_bucket_count() const	{ return m_numUsed; }
-	size_type used_memory() const
-	{
-		return bucket_count() * kNodeSize;
-	}
+	size_type used_memory() const			{ return bucket_count() * kNodeSize; }
 
 	const allocator_type& get_allocator() const	{ return m_allocator; }
 	void set_allocator(const allocator_type& allocator) { m_allocator = allocator; }
@@ -636,10 +622,10 @@ public:
 private:
 	void grow()
 	{
-		const int newCapacity = (m_capacity == 0 ? kInitialCapacity : m_capacity * 2);
+		const size_type newCapacity = (m_capacity == 0 ? kInitialCapacity : m_capacity * 2);
 		grow(newCapacity);
 	}
-	void grow(int new_capacity)
+	void grow(size_t new_capacity)
 	{
 		RDE_ASSERT((new_capacity & (new_capacity - 1)) == 0);	// Must be power-of-two
 		node* newNodes = allocate_nodes(new_capacity);
@@ -653,7 +639,7 @@ private:
 		RDE_ASSERT(m_numUsed < m_capacity);
 	}
 
-	#if RDE_HAS_CPP11
+#if RDE_HAS_CPP11
 
 	template<class K = key_type, class... Args> RDE_FORCEINLINE
 	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, K&& key, Args&&... args)
@@ -677,10 +663,10 @@ private:
 		return ret_type_t(iterator(n, this), true);
 	}
 
-	#else
+#else
 
-	#if !USE_CPP0X_COMPATABILITY_TEMPLATES
-		
+#if !USE_CPP0X_COMPATABILITY_TEMPLATES
+
 	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, TKey&& key, TValue&& value) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 
@@ -700,10 +686,10 @@ private:
 		return ret_type_t(iterator(n, this), true);
 	}
 
-	#else
+#else
 
 	template<class Arg1> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -718,7 +704,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -733,7 +719,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -748,7 +734,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -763,7 +749,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -778,7 +764,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -793,7 +779,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -808,7 +794,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -823,7 +809,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -838,7 +824,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -853,7 +839,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -868,7 +854,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -883,7 +869,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -898,7 +884,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -913,7 +899,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -928,7 +914,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -943,7 +929,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -958,7 +944,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -973,7 +959,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -988,7 +974,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -1003,7 +989,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -1018,7 +1004,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -1033,7 +1019,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -1048,7 +1034,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23, class Arg24> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -1063,7 +1049,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23, class Arg24, class Arg25> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24, Arg25&& arg25) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24, Arg25&& arg25) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -1078,7 +1064,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23, class Arg24, class Arg25, class Arg26> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24, Arg25&& arg25, Arg26&& arg26) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24, Arg25&& arg25, Arg26&& arg26) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -1093,7 +1079,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23, class Arg24, class Arg25, class Arg26, class Arg27> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24, Arg25&& arg25, Arg26&& arg26, Arg27&& arg27) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24, Arg25&& arg25, Arg26&& arg26, Arg27&& arg27) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -1108,7 +1094,7 @@ private:
 	}
 
 	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23, class Arg24, class Arg25, class Arg26, class Arg27, class Arg28> RDE_FORCEINLINE
-	rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24, Arg25&& arg25, Arg26&& arg26, Arg27&& arg27, Arg28&& arg28) {
+		rde::pair<iterator, bool> emplace_at(node* n, hash_value_t hash, key_type&& key, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24, Arg25&& arg25, Arg26&& arg26, Arg27&& arg27, Arg28&& arg28) {
 		typedef rde::pair<iterator, bool> ret_type_t;
 		if (n->is_occupied()) {
 			RDE_ASSERT(hash == n->hash && m_keyEqualFunc(key, n->data.first));
@@ -1122,8 +1108,8 @@ private:
 		return ret_type_t(iterator(n, this), true);
 	}
 
-	#endif // #if USE_CPP0X_COMPATABILITY_TEMPLATES
-	#endif // #if RDE_HAS_CPP11
+#endif // #if USE_CPP0X_COMPATABILITY_TEMPLATES
+#endif // #if RDE_HAS_CPP11
 
 	rde::pair<iterator, bool> insert_at(const value_type& v, node* n, hash_value_t hash)
 	{
@@ -1133,6 +1119,7 @@ private:
 
 		RDE_ASSERT(!n->is_occupied());
 		//return emplace_at(n, hash, v.first, v.second);
+
 		typedef rde::pair<iterator, bool> ret_type_t;
 
 		if (n->is_occupied()) {
@@ -1149,7 +1136,6 @@ private:
 
 		RDE_ASSERT(invariant());
 		return ret_type_t(iterator(n, this), true);
-
 	}
 	node* find_for_insert(const key_type& key, hash_value_t* out_hash)
 	{
@@ -1206,7 +1192,7 @@ private:
 		return m_nodes + m_capacity;
 	}
 
-	static void rehash(int new_capacity, node* new_nodes, int capacity, const node* nodes, bool destruct_original)
+	static void rehash(size_t new_capacity, node* new_nodes, size_t capacity, const node* nodes, bool destruct_original)
 	{
 		//if (nodes == &ms_emptyNode || new_nodes == &ms_emptyNode)
 		//  return;
@@ -1249,14 +1235,13 @@ private:
 		}
 	}
 
-	node* allocate_nodes(int n)
+	node* allocate_nodes(size_t n)
 	{
 		node* buckets = static_cast<node*>(m_allocator.allocate(n * sizeof(node)));
 		node* iterBuckets(buckets);
 		node* end = iterBuckets + n;
-		for (/**/; iterBuckets != end; ++iterBuckets)
+		for (; iterBuckets != end; ++iterBuckets)
 			iterBuckets->hash = node::kUnusedHash;
-
 		return buckets;
 	}
 	void delete_nodes()
@@ -1304,10 +1289,10 @@ private:
 	}
 
 	node*			m_nodes;
-	int				m_size;
-	int				m_capacity;
+	size_type		m_size;
+	size_type		m_capacity;
 	std::uint32_t	m_capacityMask;
-	int				m_numUsed;
+	size_type		m_numUsed;
 	THashFunc       m_hashFunc;
 	TKeyEqualFunc	m_keyEqualFunc;
 	TAllocator      m_allocator;
