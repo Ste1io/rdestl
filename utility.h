@@ -2,6 +2,7 @@
 #define RDESTL_UTILITY_H
 
 #include <new>
+#include <utility> //for std::move, std::forward
 #include "rdestl_common.h"
 #include "int_to_type.h"
 
@@ -205,28 +206,16 @@ namespace internal
 	}
 
 } // namespace internal
-} // namespace rde
 
+#if !RDE_HAS_CPP14
+#if RDE_HAS_CPP11 || RDE_COMPILER_MSVC_2010
 
-#if !RDE_HAS_CPP11
-
-#include <type_traits>
-#include <utility>
-
-namespace std {
-
-// TODO add overload to accept nullptr as `new_value`
-
-//template<typename T, typename U>
-//typename std::enable_if<
-//	std::is_same<U, ::std::nullptr_t>::value, ::std::nullptr_t
-//>::type
-//exchange(T& obj, U&& new_value)
-//{
-//	T old_value = std::move(obj);
-//	obj = new_value;
-//	return old_value;
-//}
+//
+// exchange
+//
+// C++11 compatable version of exchange (introduced in C++14)
+// See https://devdocs.io/cpp/utility/exchange
+//
 
 template<typename T>
 T exchange(T& obj, T&& new_value)
@@ -239,14 +228,16 @@ T exchange(T& obj, T&& new_value)
 template<typename T, typename U>
 T exchange(T& obj, U&& new_value)
 {
+	(void)(&new_value);
 	T old_value = std::move(obj);
 	obj = std::forward<U>(new_value);
 	return old_value;
 }
 
-} // namespace std
+#endif // #if RDE_HAS_CPP11
+#endif // #if !RDE_HAS_CPP14
 
-#endif // #if !RDE_HAS_CPP11
+} // namespace rde
 
 //-----------------------------------------------------------------------------
 #endif // #ifndef RDESTL_UTILITY_H
