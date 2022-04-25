@@ -556,6 +556,390 @@ public:
 		RDE_ASSERT(invariant());
 	}
 
+	#if RDE_HAS_CPP11
+
+	template<class... Args>
+	iterator emplace(iterator pos, Args&&... args)
+	{
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		// @todo: optimize for toMove==0 --> push_back here?
+		const size_type index = (size_type)(pos - m_begin);
+		if (m_end == m_capacityEnd)
+		{
+			grow();
+			pos = m_begin + index;
+		}
+		else
+		{
+			rde::construct(m_end);
+		}
+
+		// @note: conditional vs empty loop, what's better?
+		if (m_end > pos)
+		{
+			if (!has_trivial_copy<T>::value)
+			{
+				const size_type prevSize = size();
+				RDE_ASSERT(index <= prevSize);
+				const size_type toMove = prevSize - index;
+
+				rde::internal::move_n(pos, toMove, pos + 1, int_to_type<has_trivial_copy<T>::value>());
+			}
+			else
+			{
+				RDE_ASSERT(pos < m_end);
+				const size_type n = reinterpret_cast<uintptr_t>(m_end) - reinterpret_cast<uintptr_t>(pos);
+				Sys::MemMove(pos + 1, pos, n);
+			}
+		}
+		rde::construct_args(pos, std::forward<Args>(args)...);
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	#else // ^^ #if RDE_HAS_CPP11
+
+	template<class Arg1>
+	iterator emplace(iterator pos, Arg1&& arg1) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20), std::forward<Arg21>(arg21));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20), std::forward<Arg21>(arg21), std::forward<Arg22>(arg22));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20), std::forward<Arg21>(arg21), std::forward<Arg22>(arg22), std::forward<Arg23>(arg23));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23, class Arg24>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20), std::forward<Arg21>(arg21), std::forward<Arg22>(arg22), std::forward<Arg23>(arg23), std::forward<Arg24>(arg24));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23, class Arg24, class Arg25>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24, Arg25&& arg25) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20), std::forward<Arg21>(arg21), std::forward<Arg22>(arg22), std::forward<Arg23>(arg23), std::forward<Arg24>(arg24), std::forward<Arg25>(arg25));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23, class Arg24, class Arg25, class Arg26>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24, Arg25&& arg25, Arg26&& arg26) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20), std::forward<Arg21>(arg21), std::forward<Arg22>(arg22), std::forward<Arg23>(arg23), std::forward<Arg24>(arg24), std::forward<Arg25>(arg25), std::forward<Arg26>(arg26));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23, class Arg24, class Arg25, class Arg26, class Arg27>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24, Arg25&& arg25, Arg26&& arg26, Arg27&& arg27) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20), std::forward<Arg21>(arg21), std::forward<Arg22>(arg22), std::forward<Arg23>(arg23), std::forward<Arg24>(arg24), std::forward<Arg25>(arg25), std::forward<Arg26>(arg26), std::forward<Arg27>(arg27));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23, class Arg24, class Arg25, class Arg26, class Arg27, class Arg28>
+	iterator emplace(iterator pos, Arg1&& arg1, Arg2&& arg2, Arg3&& arg3, Arg4&& arg4, Arg5&& arg5, Arg6&& arg6, Arg7&& arg7, Arg8&& arg8, Arg9&& arg9, Arg10&& arg10, Arg11&& arg11, Arg12&& arg12, Arg13&& arg13, Arg14&& arg14, Arg15&& arg15, Arg16&& arg16, Arg17&& arg17, Arg18&& arg18, Arg19&& arg19, Arg20&& arg20, Arg21&& arg21, Arg22&& arg22, Arg23&& arg23, Arg24&& arg24, Arg25&& arg25, Arg26&& arg26, Arg27&& arg27, Arg28&& arg28) {
+		RDE_ASSERT(validate_iterator(pos));
+		RDE_ASSERT(invariant());
+		pos = emplace_construct(pos);
+		rde::construct_args(pos, std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3), std::forward<Arg4>(arg4), std::forward<Arg5>(arg5), std::forward<Arg6>(arg6), std::forward<Arg7>(arg7), std::forward<Arg8>(arg8), std::forward<Arg9>(arg9), std::forward<Arg10>(arg10), std::forward<Arg11>(arg11), std::forward<Arg12>(arg12), std::forward<Arg13>(arg13), std::forward<Arg14>(arg14), std::forward<Arg15>(arg15), std::forward<Arg16>(arg16), std::forward<Arg17>(arg17), std::forward<Arg18>(arg18), std::forward<Arg19>(arg19), std::forward<Arg20>(arg20), std::forward<Arg21>(arg21), std::forward<Arg22>(arg22), std::forward<Arg23>(arg23), std::forward<Arg24>(arg24), std::forward<Arg25>(arg25), std::forward<Arg26>(arg26), std::forward<Arg27>(arg27), std::forward<Arg28>(arg28));
+		++m_end;
+		RDE_ASSERT(invariant());
+		TStorage::record_high_watermark();
+		return pos;
+	}
+
+	#endif // #if !RDE_HAS_CPP11
+
 	void insert(int index, size_type n, const T& val)
 	{
 		RDE_ASSERT(invariant());
@@ -765,6 +1149,40 @@ public:
 	}
 
 private:
+#if !RDE_HAS_CPP11
+	iterator emplace_construct(iterator pos) {
+		const size_type index = (size_type)(pos - m_begin);
+		if (m_end == m_capacityEnd)
+		{
+			grow();
+			pos = m_begin + index;
+		}
+		else
+		{
+			rde::construct(m_end);
+		}
+
+		if (m_end > pos)
+		{
+			if (!has_trivial_copy<T>::value)
+			{
+				const size_type prevSize = size();
+				RDE_ASSERT(index <= prevSize);
+				const size_type toMove = prevSize - index;
+				rde::internal::move_n(pos, toMove, pos + 1, int_to_type<has_trivial_copy<T>::value>());
+			}
+			else
+			{
+				RDE_ASSERT(pos < m_end);
+				const size_type n = reinterpret_cast<uintptr_t>(m_end) - reinterpret_cast<uintptr_t>(pos);
+				Sys::MemMove(pos + 1, pos, n);
+			}
+		}
+
+		return pos;
+	}
+#endif // #if !RDE_HAS_CPP11
+
 	size_type compute_new_capacity(size_type newMinCapacity) const
 	{
 		const size_type c = capacity();
