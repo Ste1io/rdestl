@@ -16,8 +16,8 @@ struct list_base_node
 		reset();
 #endif
 	}
-	void reset() { next = prev = this; }
-	bool in_list() const { return this != next; }
+	void reset()			{ next = prev = this; }
+	bool in_list() const	{ return this != next; }
 
 	void link_before(list_base_node* nextNode);
 	void unlink();
