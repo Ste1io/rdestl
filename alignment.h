@@ -9,7 +9,8 @@ namespace rde
 namespace internal
 {
 #pragma warning(push)
-#pragma warning(disable: 4324) // structure was padded due to __declspec(align())
+// structure was padded due to __declspec(align())
+#pragma warning(disable: 4324)
 
 template<typename T>
 struct alignof_helper
