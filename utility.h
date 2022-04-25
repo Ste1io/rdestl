@@ -52,7 +52,7 @@ namespace internal
 	template<typename T> RDE_FORCEINLINE
 	void move_n(const T* from, size_t n, T* result, int_to_type<false>)
 	{
-		for (int i = int(n) - 1; i >= 0; --i)
+		for (size_t i = n - 1; i != size_t(-1); --i)
 			result[i] = from[i];
 	}
 	template<typename T> RDE_FORCEINLINE
@@ -162,7 +162,7 @@ namespace internal
 			new (to + i) T();
 	}
 	template<typename T> inline
-	void construct_n(T*, int, int_to_type<true>)
+	void construct_n(T*, size_t, int_to_type<true>)
 	{
 		// trivial ctor, nothing to do.
 	}
@@ -214,6 +214,8 @@ namespace internal
 #include <utility>
 
 namespace std {
+
+// TODO add overload to accept nullptr as `new_value`
 
 //template<typename T, typename U>
 //typename std::enable_if<

@@ -6,7 +6,6 @@
 namespace rde
 {
 
-//=============================================================================
 template<typename T, size_t N>
 class fixed_array
 {
@@ -61,5 +60,4 @@ using array = fixed_array<T, N>;
 
 } // namespace rde
 
-//-----------------------------------------------------------------------------
 #endif // #ifndef RDESTL_FIXED_ARRAY_H

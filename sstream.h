@@ -14,6 +14,8 @@
 namespace rde
 {
 
+// TODO Simplify safe bool idiom implementation
+
 /**
  * this is a super cut down replacement for std::stringstream
  * current limitations:

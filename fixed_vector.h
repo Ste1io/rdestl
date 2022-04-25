@@ -7,14 +7,12 @@
 #define RDESTL_RECORD_WATERMARKS	0
 
 // @TODO Wont work on 64-bit!
-// 4267 -- conversion from size_t to int.
-#pragma warning(push)
-#pragma warning(disable: 4267)
 
 namespace rde
 {
+
 //=============================================================================
-template<typename T, class TAllocator, int TCapacity, bool TGrowOnOverflow>
+template<typename T, class TAllocator, size_t TCapacity, bool TGrowOnOverflow>
 struct fixed_vector_storage
 {
 	explicit fixed_vector_storage(const TAllocator& allocator)
@@ -116,10 +114,8 @@ struct fixed_vector_storage
 };
 
 //=============================================================================
-template<typename T, int TCapacity, bool TGrowOnOverflow, class TAllocator = rde::allocator>
-class fixed_vector: public vector<T, TAllocator,
-	fixed_vector_storage<T, TAllocator, TCapacity, TGrowOnOverflow>
->
+template<typename T, size_t TCapacity, bool TGrowOnOverflow, class TAllocator = rde::allocator>
+class fixed_vector: public vector<T, TAllocator, fixed_vector_storage<T, TAllocator, TCapacity, TGrowOnOverflow>>
 {
 	typedef vector<T, TAllocator,
 		fixed_vector_storage<T, TAllocator, TCapacity, TGrowOnOverflow>
@@ -155,14 +151,10 @@ public:
 	fixed_vector& operator=(const fixed_vector& rhs)
 	{
 		if (&rhs != this)
-		{
 			base_vector::copy(rhs);
-		}
 		return *this;
 	}
 };
-
-#pragma warning(pop)
 
 } // namespace rde
 

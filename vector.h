@@ -52,7 +52,7 @@ struct standard_vector_storage
 		m_end = std::exchange(rhs.m_end, nullptr);
 		m_capacityEnd = std::exchange(rhs.m_capacityEnd, nullptr);
 #else // ^^ #if RDE_HAS_CPP11
-m_begin = std::exchange(rhs.m_begin, (T*)nullptr);
+		m_begin = std::exchange(rhs.m_begin, (T*)nullptr);
 		m_end = std::exchange(rhs.m_end, (T*)nullptr);
 		m_capacityEnd = std::exchange(rhs.m_capacityEnd, (T*)nullptr);
 #endif // #if !RDE_HAS_CPP11
@@ -312,12 +312,6 @@ public:
 
 	#else // ^^ #if RDE_HAS_CPP11
 
-	#if !USE_CPP0X_COMPATABILITY_TEMPLATES
-
-	//...
-
-	#else // ^^ #if !USE_CPP0X_COMPATABILITY_TEMPLATES
-
 	template<class Arg1>
 	void emplace_back(Arg1&& arg1) {
 		if (m_end == m_capacityEnd) grow();
@@ -542,7 +536,6 @@ public:
 		TStorage::record_high_watermark();
 	}
 
-	#endif // #if USE_CPP0X_COMPATABILITY_TEMPLATES
 	#endif // #if !RDE_HAS_CPP11
 
 	void assign(const T* first, const T* last)

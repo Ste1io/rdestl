@@ -8,11 +8,8 @@
 
 namespace rde
 {
-template<
-	typename TKey,
-	typename TValue,
-	class TAllocator = rde::allocator
->
+
+template<typename TKey, typename TValue, class TAllocator = rde::allocator>
 class map
 {
 	template<typename TNodePtr, typename TPtr, typename TRef>
@@ -33,19 +30,9 @@ class map
 		{
 		}
 
-		TRef operator*() const
-		{
-			RDE_ASSERT(m_node != 0);
-			return m_node->value;
-		}
-		TPtr operator->() const
-		{
-			return &m_node->value;
-		}
-		TNodePtr node() const
-		{
-			return m_node;
-		}
+		TRef operator*() const	{ RDE_ASSERT(m_node != 0); return m_node->value; }
+		TPtr operator->() const	{ return &m_node->value; }
+		TNodePtr node() const	{ return m_node; }
 
 		node_iterator& operator++()
 		{
@@ -61,16 +48,11 @@ class map
 			return copy;
 		}
 
-		bool operator==(const node_iterator& rhs) const
-		{
-			return rhs.m_node == m_node && m_map == rhs.m_map;
-		}
-		bool operator!=(const node_iterator& rhs) const
-		{
-			return !(rhs == *this);
-		}
+		bool operator==(const node_iterator& rhs) const { return rhs.m_node == m_node && m_map == rhs.m_map; }
+		bool operator!=(const node_iterator& rhs) const { return !(rhs == *this); }
 
 		const map* get_map() const { return m_map; }
+
 	private:
 		TNodePtr find_next_node(TNodePtr node) const
 		{
@@ -84,12 +66,10 @@ class map
 	template<typename TKeym, typename TValuem>
 	struct map_pair: public rde::pair<TKeym, TValuem>
 	{
-		map_pair() {}
-		map_pair(const TKeym& k, const TValuem& v): pair<TKeym, TValuem>(k, v) {}
-		bool operator<(const map_pair& rhs) const
-		{
-			return first < rhs.first;
-		}
+		map_pair() { }
+		map_pair(const TKeym& k, const TValuem& v): pair<TKeym, TValuem>(k, v) { }
+
+		bool operator<(const map_pair& rhs) const		{ return first < rhs.first; }
 		RDE_FORCEINLINE const TKeym& get_key() const	{ return first; }
 	};
 
@@ -155,6 +135,7 @@ public:
 		return m_tree.erase(key);
 	}
 	RDE_FORCEINLINE void clear() { m_tree.clear(); }
+
 	RDE_FORCEINLINE void swap(map& other)
 	{
 		m_tree.swap(other.m_tree);

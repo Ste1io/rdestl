@@ -18,6 +18,7 @@ template<typename T1, typename T2>
 using pair = std::pair<T1, T2>;
 #else // ^^ #ifdef RDESTL_USE_STD_PAIR
 
+//=============================================================================
 template<typename T1, typename T2>
 struct pair
 {
@@ -74,6 +75,7 @@ struct is_pod<pair<T1, T2>>
 	};
 };
 
+//-----------------------------------------------------------------------------
 template<typename T1, typename T2>
 pair<T1, T2> make_pair(const T1& a, const T2& b)
 {
@@ -82,4 +84,5 @@ pair<T1, T2> make_pair(const T1& a, const T2& b)
 
 } // namespace rde
 
+//-----------------------------------------------------------------------------
 #endif // #ifndef RDESTL_PAIR_H

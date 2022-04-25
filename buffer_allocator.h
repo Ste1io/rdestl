@@ -5,6 +5,7 @@
 
 namespace rde
 {
+
 // CONCEPT!
 class buffer_allocator
 {
@@ -15,8 +16,7 @@ public:
 		m_buffer(mem),
 		m_bufferTop(0),
 		m_bufferSize(bufferSize)
-	{
-	}
+	{ }
 
 	void* allocate(size_t bytes, int /*flags*/ = 0)
 	{
@@ -25,13 +25,14 @@ public:
 		m_bufferTop += bytes;
 		return ret;
 	}
+
 	void deallocate(void* ptr, size_t /*bytes*/)
 	{
 		RDE_ASSERT(ptr == 0 || (ptr >= m_buffer && ptr < m_buffer + m_bufferSize));
 		sizeof(ptr);
 	}
 
-	const char* get_name() const	{ return m_name; }
+	const char* get_name() const { return m_name; }
 
 private:
 	const char*	m_name;

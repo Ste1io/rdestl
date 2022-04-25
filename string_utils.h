@@ -3,10 +3,11 @@
 
 namespace rde
 {
+
 //-----------------------------------------------------------------------------
-template<typename T> int strlen(const T* str)
+template<typename T> size_t strlen(const T* str)
 {
-	int len(0);
+	size_t len(0);
 	while (*str++)
 		++len;
 	return len;

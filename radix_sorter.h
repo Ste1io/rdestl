@@ -89,6 +89,7 @@ public:
 			const std::uint32_t pos = (func(m_dst[i]) >> 8) & 0xFF;
 			src[h1[pos]++] = help_buffer[i];
 		}
+
 		if (TDataType == data_unsigned && canBreakAfter16Bits)
 			return;
 
