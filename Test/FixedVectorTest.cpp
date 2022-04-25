@@ -23,6 +23,7 @@ TEST_CASE("fixed_vector", "[vector]")
 	{
 		rde::fixed_vector<__m128, 1, false> v;
 		rde::aligned_as<__m128>::res r;
+		(void)r; // prevent warning C4101: 'r' : unreferenced local variable
 		CHECK(16ul == sizeof(r));
 		CHECK(16ul == sizeof(__m128));
 		CHECK(16 == rde::rde_alignof<__m128>::res);
