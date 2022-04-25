@@ -345,7 +345,7 @@ int test_str2(int N, char * const *data)
 	kh_destroy(str, h);
 	return ret;
 }
-} // namespace
+} //namespace
 
 void Map_SpeedTest()
 {

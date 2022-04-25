@@ -244,7 +244,7 @@ T exchange(T& obj, U&& new_value)
 	return old_value;
 }
 
-} //namespace std
+} // namespace std
 
 #endif // #if !RDE_HAS_CPP11
 

@@ -202,4 +202,4 @@ TEST_CASE("sort", "[algorithm]")
 #endif // #if !RDESTL_STANDALONE && SORT_SPEED_TEST
 
 }
-} // namespace
+} //namespace
