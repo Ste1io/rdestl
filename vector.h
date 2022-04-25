@@ -34,9 +34,9 @@ struct standard_vector_storage
 		m_end(std::exchange(rhs.m_end, nullptr)),
 		m_capacityEnd(std::exchange(rhs.m_capacityEnd, nullptr)),
 #else // ^^ #if RDE_HAS_CPP11
-		: m_begin(std::exchange(rhs.m_begin, (T*)nullptr)),
-		m_end(std::exchange(rhs.m_end, (T*)nullptr)),
-		m_capacityEnd(std::exchange(rhs.m_capacityEnd, (T*)nullptr)),
+		: m_begin(exchange(rhs.m_begin, nullptr)),
+		m_end(exchange(rhs.m_end, nullptr)),
+		m_capacityEnd(exchange(rhs.m_capacityEnd, nullptr)),
 #endif // #if !RDE_HAS_CPP11
 		m_allocator(std::move(rhs.m_allocator))
 	{
@@ -52,9 +52,9 @@ struct standard_vector_storage
 		m_end = std::exchange(rhs.m_end, nullptr);
 		m_capacityEnd = std::exchange(rhs.m_capacityEnd, nullptr);
 #else // ^^ #if RDE_HAS_CPP11
-		m_begin = std::exchange(rhs.m_begin, (T*)nullptr);
-		m_end = std::exchange(rhs.m_end, (T*)nullptr);
-		m_capacityEnd = std::exchange(rhs.m_capacityEnd, (T*)nullptr);
+		m_begin = exchange(rhs.m_begin, (T*)nullptr);
+		m_end = exchange(rhs.m_end, (T*)nullptr);
+		m_capacityEnd = exchange(rhs.m_capacityEnd, (T*)nullptr);
 #endif // #if !RDE_HAS_CPP11
 		m_allocator = std::move(rhs.m_allocator);
 		return *this;
