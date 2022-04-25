@@ -14,10 +14,16 @@
 #endif
 
 #ifdef __cplusplus
-#	if __cplusplus <= 199711L // C++98 and earlier
+#	if __cplusplus <= 199711L
 #		define RDE_HAS_CPP98 1
-#	elif __cplusplus >= 201103L // C++11 and later
+#	elif __cplusplus >= 201103L
 #		define RDE_HAS_CPP11 1
+#	elif __cplusplus >= 201402L
+#		define RDE_HAS_CPP14 1
+#	elif __cplusplus >= 201703L
+#		define RDE_HAS_CPP17 1
+#	elif __cplusplus >= 202002L
+#		define RDE_HAS_CPP20 1
 #	endif
 #endif
 
