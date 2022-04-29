@@ -213,8 +213,38 @@ namespace internal
 //
 // exchange
 //
-// C++11 compatable version of exchange (introduced in C++14)
-// See https://devdocs.io/cpp/utility/exchange
+// Replaces the value of obj with new_value and returns the old value of obj.
+//
+// C++11 compatable version of std::exchange (introduced in C++14).
+// Requires either C++11, or MSVC100 (for move/forward).
+//
+// NOTE: In cases that template argument deduction cannot happen, resulting in a non-deduced context
+// (such as when exchanging overloaded functions causing ambiguous deduction), implicit instantiation
+// will fail due to U not being a default template argument. In this case, explicit instantiation is needed.
+//
+// Example usage:
+//    int  i1 = 1;
+//    int* p1 = &i1;
+//    void f1() { puts("f1"); };
+//    void f2() { puts("f2"); };
+//    void (*fp1)() = &f1;
+//
+//    int i2 = exchange(i1, 0); // i2==1, i1==0
+//    int* p2 = exchange(p1, nullptr); // p2==&i1, p1==nullptr
+//
+//    fp1(); // prints "f1"
+//    void (*fp2)() = exchange(fp1, &f2);
+//    fp1(); // prints "f2"
+//    fp2(); // prints "f1"
+//
+// Example usage with a non-deduced context:
+//    void     f(double);
+//    void     f(int);
+//    void (*fp)(int);
+//    //exchange(fp, &f); // fails due to ambiguous overload resolution
+//    exchange(fp, static_cast<void(*)(int)>(fp1)); // ok: explicitly cast second parameter
+//    exchange<void(*)(int)>(fp, &fp1); // ok: explicit template instantiation
+//    exchange<decltype(fp)>(fp, &fp1); // ok: same as both of the above, using decltype
 //
 
 template<typename T>
